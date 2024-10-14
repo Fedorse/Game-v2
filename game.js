@@ -1,4 +1,6 @@
 import { Player } from './Player.js'
+import { InputHandler } from './InputHandler.js'
+
 export  class Game {
  constructor(canvas, context) {
     this.canvas = canvas
@@ -7,10 +9,12 @@ export  class Game {
     this.deltaTime = 0
     this.gameOver = false
     this.player = new Player(this)
+    this.inputHandler = new InputHandler
  }
  start() {
 requestAnimationFrame(this.gameLoop.bind(this))
  }
+
 
  gameLoop(timeStamp){
     this.deltaTime = (timeStamp - this.lastTime) / 1000
@@ -26,10 +30,13 @@ requestAnimationFrame(this.gameLoop.bind(this))
     }
  }
  update(deltaTime) {
-
+    this.player.update(deltaTime)
  }
  render(){
     this.context.clearRect(0, 0 , this.canvas.width, this.canvas.height)
+
+    this.player.render(this.context)
  }
+ 
 }
 

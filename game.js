@@ -1,5 +1,8 @@
 import { Player } from './Player.js'
 import { InputHandler } from './InputHandler.js'
+import { Spawner } from './Spawner.js'
+import { Camera } from './Camera.js'
+import { MapGenerator } from './MapGenerator.js'
 
 export  class Game {
  constructor(canvas, context) {
@@ -10,6 +13,18 @@ export  class Game {
     this.gameOver = false
     this.player = new Player(this)
     this.inputHandler = new InputHandler
+    this.enemies = []
+    this.spawner = new Spawner(this)
+    this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
+    this.mapGenerator = new MapGenerator(32, 32)
+
+
+    this.tilesetImage = new Image()
+    this.tilesetImage.src = '../public/img/tileset.png'
+    this.tilesetImage.onload = () => {
+        this.mapGenerator.setTilesetImage(this.tilesetImage)
+        this.mapGenerator.generateMap(100, 100)
+    }
  }
  start() {
 requestAnimationFrame(this.gameLoop.bind(this))
@@ -31,11 +46,20 @@ requestAnimationFrame(this.gameLoop.bind(this))
  }
  update(deltaTime) {
     this.player.update(deltaTime)
+    this.spawner.update(deltaTime)
+    this.camera.follow(this.player)
  }
  render(){
-    this.context.clearRect(0, 0 , this.canvas.width, this.canvas.height)
+   this.context.fillStyle = 'black'
+   this.context.fillRect(0, 0 , this.canvas.width, this.canvas.height)
+   //  this.context.clearRect(0, 0 , this.canvas.width, this.canvas.height)
+   this.context.save()
+   this.context.translate(-this.camera.x, -this.camera.y)
+   this.mapGenerator.render(this.context,this.camera)
+   this.player.render(this.context)
+   this.context.restore()
 
-    this.player.render(this.context)
+   //  this.enemies.forEach(enemy => enemy.render(this.context))
  }
  
 }

@@ -4,7 +4,7 @@ export class Player {
         this.game = game
         this.width = 100
         this.height = 100
-        this.speed = 100
+        this.speed = 500
         this.position = {
             x: 100,
             y: 100

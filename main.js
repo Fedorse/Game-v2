@@ -9,4 +9,4 @@ const game = new Game(canvas, context);
 
 game.start();
 
-console.log(game.InputHandler)
+console.log(game)

@@ -5,7 +5,7 @@ export class Sprite {
         this.frameWidth = frameWidth
         this.frameHeight = frameHeight
         this.totalFrames = totalFrames
-        this.currentFrame = 6
+        this.currentFrame = 0
         this.frameTime= 0
         this.frameTimer = 0
         this.frameInterval = 100

@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "simplex-noise": "^4.0.3"
   }
 }

@@ -45,7 +45,7 @@ requestAnimationFrame(this.gameLoop.bind(this))
    this.enemies.forEach((enemy , index) => {
       enemy.update(deltaTime)
    })
-   this.enemies = this.enemies.filter(enemy => !enemy.toRemove)
+    this.enemies = this.enemies.filter(enemy => !enemy.toRemove)
     this.player.update(deltaTime)
     this.camera.follow(this.player)
     this.spawner.update(deltaTime)

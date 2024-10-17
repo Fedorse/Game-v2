@@ -1,4 +1,5 @@
 import {Sprite} from './Sprite.js'
+import { Weapon } from './Weapon.js'
 export class Player {
     constructor(game){
         this.game = game
@@ -28,15 +29,16 @@ export class Player {
             },
             
         })
-        this.attackCooldown = 0.9
+        this.weapon = new Weapon(this, '../public/img/weapons/sword.png')
+        this.attackCooldown = 0.3
         this.attackTimer = 0
         this.isAttacking = false 
-        this.attackDuration = 0.1
+        this.attackDuration = 0.3
         this.attackRange = {
             x: 0,
             y: 0,
-            width: 150,
-            height: 120
+            width: 100,
+            height: 100
         }
         this.flipX = false
         
@@ -67,8 +69,8 @@ export class Player {
             this.position.y += velocity.y * this.speed * deltaTime
 
         // Обновляем атаку
+        
         if (this.isAttacking) {
-            // this.sprite.setAnimation('attack')
             this.attackTimer += deltaTime;
             if (this.attackTimer > this.attackDuration) {
                 this.isAttacking = false; // Заканчиваем атаку
@@ -89,7 +91,6 @@ export class Player {
             // Если атака не идет и таймер отката завершен, запускаем атаку
             this.attack();
         }
-            this.sprite.update(deltaTime)
 
             if(this.isAttacking){
                 this.game.enemies.forEach(enemy=>{
@@ -98,7 +99,12 @@ export class Player {
                     }
                 })
             }
+
+            this.sprite.update(deltaTime)
+            // this.weapon.update(deltaTime)
+
         }
+
 
         render(context){
             context.save();
@@ -113,12 +119,13 @@ export class Player {
             )
 
         if (this.isAttacking) {
-            context.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Полупрозрачный красный цвет
+            context.fillStyle = 'rgba(255, 0, 0, 0.5)'; 
 
             
             // Определение позиции зоны атаки (спереди игрока)
             this.attackRange.x = this.game.player.position.x 
             this.attackRange.y = this.game.player.position.y
+
 
             // Отрисовка зоны атаки
             context.fillRect(
@@ -127,6 +134,7 @@ export class Player {
                 this.attackRange.width,
                 this.attackRange.height
             );
+            // this.weapon.render(context)
         }
             context.restore();
         }
@@ -143,6 +151,10 @@ export class Player {
                 this.attackRange.x + this.attackRange.width > enemy.position.x &&
                 this.attackRange.y < enemy.position.y + enemy.height &&
                 this.attackRange.height + this.attackRange.y > enemy.position.y
+                // this.weapon.position.x < enemy.position.x + enemy.width &&
+                // this.weapon.position.x + this.weapon.width > enemy.position.x &&
+                // this.weapon.position.y < enemy.position.y + enemy.height &&
+                // this.weapon.position.y + this.weapon.height > enemy.position.y
             );
         }
         

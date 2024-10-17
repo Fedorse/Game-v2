@@ -42,7 +42,7 @@ requestAnimationFrame(this.gameLoop.bind(this))
     }
  }
  update(deltaTime) {
-   this.enemies.forEach((enemy , index) => {
+   this.enemies.forEach((enemy ) => {
       enemy.update(deltaTime)
    })
     this.enemies = this.enemies.filter(enemy => !enemy.toRemove)

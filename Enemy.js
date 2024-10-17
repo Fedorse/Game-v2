@@ -28,7 +28,7 @@ export class Enemy {
             },
             
         })        
-        this.health = 4
+        this.health = 100
         this.toRemove = false
         this.isDead = false
         this.flipX = false

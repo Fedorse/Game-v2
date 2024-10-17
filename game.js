@@ -6,9 +6,10 @@ import { MapGenerator } from './MapGenerator.js'
 
 
 export  class Game {
- constructor(canvas, context) {
+ constructor(canvas, context, resourceManager) {
     this.canvas = canvas
     this.context = context
+    this.resourceManager = resourceManager
     this.lastTime = 0
     this.deltaTime = 0
     this.gameOver = false
@@ -17,10 +18,7 @@ export  class Game {
     this.enemies = []
     this.spawner = new Spawner(this)
     this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
-
-    this.tileSetImage = new Image();
-    this.tileSetImage.src = '../public/img/tileset.png';
-    this.mapGenerator = new MapGenerator(this, this.tileSetImage);
+    this.mapGenerator = new MapGenerator(this);
 
  }
  start() {

@@ -10,25 +10,17 @@ export class Enemy {
         }
         this.speed = 50
         this.sprite = new Sprite({
-            run: {
-                imgSrc: '../public/img/enemy/Run.png',
-                frames: 8, 
-                frameWidth: 150, 
-                frameHeight: 150, 
-                frameY: 0, 
-                frameInterval: 200
-            },
-            death: {
-                imgSrc: '../public/img/enemy/Death.png',
+            walk: {
+                imageName: 'enemyWalk',
                 frames: 4, 
-                frameWidth: 150, 
-                frameHeight: 150, 
+                frameWidth: 64, 
+                frameHeight: 64, 
                 frameY: 0, 
-                frameInterval: 200
-            },
-            
-        })        
-        this.health = 100
+                frameInterval: 100
+            }, 
+        }, this.game.resourceManager, 'walk')  
+             
+        this.health = 3
         this.toRemove = false
         this.isDead = false
         this.flipX = false
@@ -37,7 +29,7 @@ export class Enemy {
 
     update(deltaTime){
         if(this.isDead){
-            this.sprite.setAnimation('death')
+            // this.sprite.setAnimation('death')
             this.sprite.update(deltaTime)
             return
         }
@@ -47,7 +39,7 @@ export class Enemy {
         const distance = Math.hypot(dx, dy)
 
         if(distance > 0){
-            this.sprite.setAnimation('run')
+            this.sprite.setAnimation('walk')
             this.sprite.update(deltaTime)
 
             this.position.x += (dx / distance) * this.speed * deltaTime

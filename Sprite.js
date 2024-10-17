@@ -1,30 +1,14 @@
 export class Sprite {
-    constructor(animations) {
+    constructor(animations, resourceManager, intitialAnimation = 'idle') {
         this.animations = animations
-        this.currentAnimation = 'idle'
+        this.currentAnimation = intitialAnimation
         this.currentFrame = 0
         this.frameTimer = 0
-        this.isLoaded = false
-
-
-        this.loadAnimations()
-
+        this.resourceManager = resourceManager
     }
-    loadAnimations(){
-        Object.keys(this.animations).forEach((key)=> {
-            const animation = this.animations[key]
-            animation.img = new Image()
-            animation.img.src = animation.imgSrc
-            animation.img.onload = () => {
-                animation.isLoaded = true;
-                this.isLoaded = true;
-            };
-        })
-    }
+
     update(deltaTime){
             //animation
-            if(!this.isLoaded) return
-
             const animation = this.animations[this.currentAnimation]
             this.frameTimer += deltaTime * 1000 ;
 
@@ -33,11 +17,15 @@ export class Sprite {
                 this.frameTimer = 0
             }
     }
+
     draw(context, x, y, width, height, flipX=false ){
-        
-        if(!this.isLoaded) return
 
         const animation = this.animations[this.currentAnimation]
+        const image = this.resourceManager.getImage(animation.imageName)
+        if(!image) {
+            console.error(`Image ${animation.imageName} not found`)
+        }
+
         const frameX = this.currentFrame * animation.frameWidth
         context.save()
         if(flipX){
@@ -47,7 +35,7 @@ export class Sprite {
             context.translate(x, y)
         }
         context
-        .drawImage(animation.img, frameX, animation.frameY, 
+        .drawImage(image, frameX, animation.frameY, 
             animation.frameWidth, animation.frameHeight, 
             0, 0, 
             width, height)

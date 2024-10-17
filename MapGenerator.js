@@ -1,12 +1,12 @@
 import { createNoise2D } from 'simplex-noise';
 
 export class MapGenerator {
-  constructor(game, tileSetImage) {
+  constructor(game) {
     this.game = game;
-    this.tileSetImage = tileSetImage;
     this.simplex = createNoise2D();
     this.tileWidth = 32;
     this.tileHeight = 32;
+    this.tileSetImage = this.game.resourceManager.getImage('tileset')
 
     this.tileMapping = {
       grass: { row: 0, col: 0 },

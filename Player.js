@@ -12,23 +12,22 @@ export class Player {
         }
         this.sprite = new Sprite({
             idle: {
-                imgSrc: '../public/img/player/Idle.png',
+                imageName: 'playerIdle',
                 frames: 4, 
-                frameWidth: 150, 
-                frameHeight: 150, 
+                frameWidth: 64, 
+                frameHeight: 64, 
                 frameY: 0, 
                 frameInterval: 200
             },
             walk: {
-                imgSrc: '../public/img/player/Walk.png',
+                imageName: 'playerWalk',
                 frames: 4, 
-                frameWidth: 150, 
-                frameHeight: 150, 
+                frameWidth: 64, 
+                frameHeight: 64, 
                 frameY: 0, 
                 frameInterval: 200
-            },
-            
-        })
+            }, 
+        }, this.game.resourceManager)
         this.weapon = new Weapon(this, '../public/img/weapons/sword.png')
         this.attackCooldown = 0.3
         this.attackTimer = 0
@@ -78,7 +77,7 @@ export class Player {
         } else if (moving){
             this.sprite.setAnimation('walk')
         } else {
-            this.sprite.setAnimation('idle')
+            this.sprite.setAnimation('walk')
         }
 
 

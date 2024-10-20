@@ -1,4 +1,5 @@
 import { Sprite } from "./Sprite"
+import { ExperienceOrb } from "./ExperienceOrb"
 export class Enemy { 
     constructor(game){
         this.game = game, 
@@ -69,6 +70,7 @@ export class Enemy {
         if(this.health <= 0){
             this.toRemove = true
             this.isDead = true
+            this.game.experienceOrbs.push(new ExperienceOrb(this.game, this.position))
         }
     }
 

@@ -18,7 +18,7 @@ export class Sprite {
             }
     }
 
-    draw(context, x, y, width, height, flipX=false ){
+    draw(context, x, y, width, height, flipX = false ){
 
         const animation = this.animations[this.currentAnimation]
         const image = this.resourceManager.getImage(animation.imageName)

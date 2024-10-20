@@ -40,11 +40,15 @@ export class Player {
             height: 100
         }
         this.flipX = false
+        this.experience = 0
+        this.nextLevelUp = 100
+        this.level = 1
         
     }
     
         update(deltaTime){
             //movement
+            console.log(this.nextLevelUp)
             const input = this.game.inputHandler
             let velocity ={
                 x: 0,
@@ -77,7 +81,7 @@ export class Player {
         } else if (moving){
             this.sprite.setAnimation('walk')
         } else {
-            this.sprite.setAnimation('walk')
+            this.sprite.setAnimation('idle')
         }
 
 
@@ -101,6 +105,8 @@ export class Player {
 
             this.sprite.update(deltaTime)
             // this.weapon.update(deltaTime)
+
+            this.checkExperience()
 
         }
 
@@ -144,16 +150,30 @@ export class Player {
                 this.attackTimer = this.attackCooldown;
             }
         }
-        isColliding(enemy) {
+        checkExperience(){
+            this.game.experienceOrbs.forEach((orb, index)=> {
+                if(this.isColliding(orb)){
+                    this.game.experienceOrbs.splice(index, 1)
+                    this.experience += orb.value
+
+                }
+                if(this.experience >= this.nextLevelUp){
+                    this.levelUp()
+                }
+            })
+        }
+        levelUp(){
+            this.level ++
+            this.experience = 0
+            this.nextLevelUp += 50
+            // alert(`Level ${this.levelUp} up`)
+        }
+        isColliding(obj) {
             return (
-                this.attackRange.x < enemy.position.x + enemy.width &&
-                this.attackRange.x + this.attackRange.width > enemy.position.x &&
-                this.attackRange.y < enemy.position.y + enemy.height &&
-                this.attackRange.height + this.attackRange.y > enemy.position.y
-                // this.weapon.position.x < enemy.position.x + enemy.width &&
-                // this.weapon.position.x + this.weapon.width > enemy.position.x &&
-                // this.weapon.position.y < enemy.position.y + enemy.height &&
-                // this.weapon.position.y + this.weapon.height > enemy.position.y
+                this.attackRange.x < obj.position.x + obj.width &&
+                this.attackRange.x + this.attackRange.width > obj.position.x &&
+                this.attackRange.y < obj.position.y + obj.height &&
+                this.attackRange.height + this.attackRange.y > obj.position.y
             );
         }
         

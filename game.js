@@ -17,6 +17,8 @@ export  class Game {
     this.inputHandler = new InputHandler()
     this.enemies = []
     this.experienceOrbs = []
+    this.projectiles = []
+    this.damageTexts = []
     this.spawner = new Spawner(this)
     this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
     this.mapGenerator = new MapGenerator(this);
@@ -37,7 +39,6 @@ requestAnimationFrame(this.gameLoop.bind(this))
     if(!this.gameOver){
         requestAnimationFrame(this.gameLoop.bind(this))
     }else{
-        alert('game over');
         document.location.reload();
     }
  }
@@ -51,16 +52,34 @@ requestAnimationFrame(this.gameLoop.bind(this))
          this.experienceOrbs.splice(index, 1)
       }
    })
+
+   this.projectiles.forEach((projectil, index) => {
+      projectil.update(deltaTime)
+      if(projectil.toRemove){
+         this.projectiles.splice(index, 1)
+      }
+   })
+
+   // this.damageTexts.forEach((text, index)=>{
+   //    text.update(deltaTime)
+   //    if(text.toRemove){
+   //       this.damageTexts.splice(index, 1)
+   //    }
+   // })
+
     this.enemies = this.enemies.filter(enemy => !enemy.toRemove)
     this.player.update(deltaTime)
     this.camera.follow(this.player)
     this.spawner.update(deltaTime)
  }
  render(){
+   
    this.mapGenerator.generateMap(this.context, this.camera);
    this.player.render(this.context)
    this.enemies.forEach(enemy => enemy.render(this.context))
    this.experienceOrbs.forEach(orb => orb.render(this.context))
+   this.projectiles.forEach(projectil => projectil.render(this.context))
+   // this.damageTexts.forEach(text => text.render(this.context))
  }
  
 }

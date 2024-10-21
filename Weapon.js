@@ -1,37 +1,50 @@
+// Weapon.js
 export class Weapon {
-    constructor(player, imgSrc) {
-        this.player = player;
-        this.img = new Image();
-        this.img.src = imgSrc;
-        this.width = 32;
-        this.height = 32;
-        this.angle = 0;  // Угол вращения
-        this.radius = 50;  // Радиус вращения вокруг игрока
-        this.rotationSpeed = Math.PI;  // Скорость вращения
+    constructor(game, owner) {
+      this.game = game; // Ссылка на игру
+      this.owner = owner; // Владелец оружия (игрок)
+      this.level = 1; // Начальный уровень оружия
+      this.maxLevel = 6; // Максимальный уровень
+      this.experience = 0; // Опыт оружия
+      this.nextLevelExperience = 100; // Опыт для повышения уровня
+      this.attackCooldown = 1.0; // Время отката между атаками
+      this.attackTimer = 0; // Таймер отката
     }
-
+  
     update(deltaTime) {
-        // Увеличиваем угол вращения
-        this.angle += this.rotationSpeed * deltaTime;
-
-        // Рассчитываем координаты оружия относительно центра игрока
-        const offsetX = Math.cos(this.angle) * this.radius;
-        const offsetY = Math.sin(this.angle) * this.radius;
-
-        // Устанавливаем положение оружия
-        this.position = {
-            x: this.player.position.x + this.player.width / 2 + offsetX - this.width / 2,
-            y: this.player.position.y + this.player.height / 2 + offsetY - this.height / 2
-        };
+      if (this.attackTimer > 0) {
+        this.attackTimer -= deltaTime;
+      } else {
+        this.attack();
+      }
     }
-
-    render(context) {
-        context.drawImage(
-            this.img,
-            this.position.x,
-            this.position.y,
-            this.width,
-            this.height
-        );
+  
+    attack() {
+      // Абстрактный метод, реализуется в наследниках
     }
-}
+  
+    gainExperience(amount) {
+      if (this.level < this.maxLevel) {
+        this.experience += amount;
+        if (this.experience >= this.nextLevelExperience) {
+          this.levelUp();
+        }
+      }
+    }
+  
+    levelUp() {
+      if (this.level < this.maxLevel) {
+        this.level++;
+        this.experience = 0;
+        this.nextLevelExperience += 100; // Настройте формулу роста опыта
+  
+        // Логика улучшения оружия при повышении уровня
+        this.upgrade();
+      }
+    }
+  
+    upgrade() {
+      // Абстрактный метод, реализуется в наследниках
+    }
+  }
+  

@@ -1,5 +1,6 @@
 import { Sprite } from "./Sprite"
 import { ExperienceOrb } from "./ExperienceOrb"
+import { DamageText } from "./DamageText"
 export class Enemy { 
     constructor(game){
         this.game = game, 
@@ -21,14 +22,26 @@ export class Enemy {
             }, 
         }, this.game.resourceManager, 'walk')  
              
-        this.health = 3
+        this.health = 30
         this.toRemove = false
         this.isDead = false
         this.flipX = false
+        this.damageTexts = []
+        this.attackCooldown = 5;  
+        this.attackTimer = 0;
+        this.damage = 10
 
     }
 
     update(deltaTime){
+
+        this.damageTexts.forEach((text,index)=>{
+            text.update(deltaTime);
+            if (text.isFinished()) {
+                this.damageTexts.splice(index, 1);  // Удаляем текст, когда анимация закончилась
+            }
+            if (this.isDead) return;
+        })
         if(this.isDead){
             // this.sprite.setAnimation('death')
             this.sprite.update(deltaTime)
@@ -49,6 +62,12 @@ export class Enemy {
             this.flipX = dx < 0
 
         }
+        this.attackTimer = Math.max(0, this.attackTimer - deltaTime)
+        if(this.isCollidingWithPlayer() && this.attackTimer <= 0){
+            this.attackPlayer()
+            this.attackTimer = this.attackCooldown
+
+        }
     }
 
     render(context){
@@ -62,17 +81,46 @@ export class Enemy {
             this.height,
             this.flipX
         )
+        this.damageTexts.forEach(text => text.render(context));
+        context.strokeStyle = 'red';
+        context.strokeRect(
+            this.position.x ,
+            this.position.y ,
+            this.width,
+            this.height
+        );
         context.restore()
+
     }
 
-    takeDamage(){
-        this.health --
+    
+    takeDamage(amount){
+        this.damageTexts.push(new DamageText({ x: this.position.x + this.width / 2, y: this.position.y }, amount));
+        this.health -= amount
+
         if(this.health <= 0){
             this.toRemove = true
             this.isDead = true
-            this.game.experienceOrbs.push(new ExperienceOrb(this.game, this.position))
+            this.game.experienceOrbs.push(new ExperienceOrb(this.game, this.position)
+        
+        )
         }
     }
+
+    isCollidingWithPlayer(){
+        const player = this.game.player
+        return (
+            this.position.x < player.position.x + player.width &&
+            this.position.x + this.width > player.position.x &&
+            this.position.y < player.position.y + player.height &&
+            this.position.y + this.height > player.position.y
+        )
+    }
+
+    attackPlayer(){
+        this.game.player.takeDamage(this.damage)
+    }
+
 
 }
 

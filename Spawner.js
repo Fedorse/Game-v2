@@ -2,7 +2,7 @@ import { Enemy } from "./Enemy"
 export class Spawner {
     constructor(game) {
         this.game = game,
-        this.spawnInterval = 2,
+        this.spawnInterval = 0.1,
         this.spawnTimer = 0
     }
     update(deltaTime) {

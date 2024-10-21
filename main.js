@@ -14,7 +14,8 @@ const imagesLoad = [
     { name: 'playerWalk', src: '../public/img/player/Vinny_walk.png' },
     { name: 'enemyWalk', src: '../public/img/enemy/PIglet_walk.png' },
     { name: 'tileset', src: '../public/img/tileset.png' },
-    {name: 'projectile', src: '../public/img/projectiles/projectile.png'}    
+    {name: 'projectile', src: '../public/img/projectiles/explosion.png'},
+    {name : 'experience', src : '../public/img/ExpOrb.png'}
 ]
 
 resourceManager.loadImages(imagesLoad)

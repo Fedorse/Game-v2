@@ -1,21 +1,22 @@
+
 export class Projectile {
     constructor(game, position, direction, speed, damage){
         this.game = game,
-        this.width = 30,
-        this.height = 30,
+        this.width = 16,
+        this.height = 16,
         this.position = {
             x: position.x - this.width / 2,
             y: position.y - this.height / 2,
           };
-        this.speed = speed,
         this.img = this.game.resourceManager.getImage('projectile')
+        this.speed = speed,
         this.toRemove = false,
-
-
+        
         this.velocity = {
             x: direction.x * this.speed,
             y: direction.y * this.speed,
           };
+
         this.damage = damage
     }
 
@@ -23,7 +24,7 @@ export class Projectile {
         this.position.x += this.velocity.x * deltaTime
         this.position.y += this.velocity.y * deltaTime
 
-            //delete borders collision
+    //delete borders collision
     // if(
     //     this.position.x < 0 ||
     //     this.position.x > this.game.canvas.width ||

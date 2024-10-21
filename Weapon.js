@@ -1,14 +1,16 @@
 // Weapon.js
 export class Weapon {
     constructor(game, owner) {
-      this.game = game; // Ссылка на игру
-      this.owner = owner; // Владелец оружия (игрок)
-      this.level = 1; // Начальный уровень оружия
-      this.maxLevel = 6; // Максимальный уровень
-      this.experience = 0; // Опыт оружия
-      this.nextLevelExperience = 100; // Опыт для повышения уровня
-      this.attackCooldown = 1.0; // Время отката между атаками
-      this.attackTimer = 0; // Таймер отката
+      this.game = game; 
+      this.owner = owner; // owner weapon
+
+      // level stats
+      this.level = 1; 
+      this.maxLevel = 6; 
+      this.experience = 0; 
+      this.nextLevelExperience = 200; 
+
+      this.attackTimer = 0; 
     }
   
     update(deltaTime) {
@@ -20,12 +22,15 @@ export class Weapon {
     }
   
     attack() {
-      // Абстрактный метод, реализуется в наследниках
+        // abstract method 
+    }
+    upgrade() {
+        // abstract method
     }
   
-    gainExperience(amount) {
+    gainExperience(exp) {
       if (this.level < this.maxLevel) {
-        this.experience += amount;
+        this.experience += exp;
         if (this.experience >= this.nextLevelExperience) {
           this.levelUp();
         }
@@ -36,15 +41,10 @@ export class Weapon {
       if (this.level < this.maxLevel) {
         this.level++;
         this.experience = 0;
-        this.nextLevelExperience += 100; // Настройте формулу роста опыта
-  
-        // Логика улучшения оружия при повышении уровня
+        this.nextLevelExperience += 100; 
         this.upgrade();
       }
     }
   
-    upgrade() {
-      // Абстрактный метод, реализуется в наследниках
-    }
   }
   

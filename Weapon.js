@@ -8,7 +8,7 @@ export class Weapon {
       this.level = 1; 
       this.maxLevel = 6; 
       this.experience = 0; 
-      this.nextLevelExperience = 200; 
+      this.nextLevelExperience = 10; 
 
       this.attackTimer = 0; 
     }
@@ -41,7 +41,7 @@ export class Weapon {
       if (this.level < this.maxLevel) {
         this.level++;
         this.experience = 0;
-        this.nextLevelExperience += 100; 
+        this.nextLevelExperience += 10; 
         this.upgrade();
       }
     }

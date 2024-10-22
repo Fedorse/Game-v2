@@ -1,5 +1,6 @@
 export class InputHandler {
-    constructor(){
+    constructor(game){
+        this.game = game
         this.left = false,
         this.right = false,
         this.up = false, 
@@ -23,6 +24,9 @@ export class InputHandler {
                 case 'KeyS':
                     this.down = true
                     break
+                case 'Space':
+                    this.game.pause()
+                    break
             }
         })
         document.addEventListener('keyup', (event)=> {
@@ -43,6 +47,7 @@ export class InputHandler {
                 case 'KeyS':
                     this.down = false
                     break
+                
             }
         })
     }

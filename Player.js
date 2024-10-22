@@ -43,6 +43,7 @@ export class Player {
         this.experience = 0
         this.nextLevelUp = 30
 
+
         this.flipX = false
 
         this.currentHealth = this.maxHealth

@@ -3,7 +3,7 @@ import { InputHandler } from './InputHandler.js'
 import { Spawner } from './Spawner.js'
 import { Camera } from './Camera.js'
 import { MapGenerator } from './MapGenerator.js'
-import { Ui } from './Ui.js'
+import { UiManager } from './UiManager.js'
 
 
 export  class Game {
@@ -12,9 +12,9 @@ export  class Game {
     this.context = context
     this.resourceManager = resourceManager
     this.player = new Player(this)
-    this.inputHandler = new InputHandler()
+    this.inputHandler = new InputHandler(this)
     this.spawner = new Spawner(this)
-    this.ui = new Ui(this, this.player)
+    this.ui = new UiManager(this, this.player)
     this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
     this.mapGenerator = new MapGenerator(this);
     this.enemies = []
@@ -23,19 +23,28 @@ export  class Game {
     this.lastTime = 0
     this.deltaTime = 0
     this.gameOver = false
-    this.totalTime = 10 * 60
-    this.timeLeft = this.totalTime
+    this.elapsedTime = 0
+    this.isPaused = false
+
  }
    start() {
    requestAnimationFrame(this.gameLoop.bind(this))
+   }
+
+   pause(){
+      this.isPaused = !this.isPaused
    }
 
 
  gameLoop(timeStamp){
     this.deltaTime = (timeStamp - this.lastTime) / 1000
     this.lastTime = timeStamp
-    this.timeLeft -= this.deltaTime
-    this.update(this.deltaTime)
+
+    if(!this.isPaused){
+       this.elapsedTime += this.deltaTime
+       this.update(this.deltaTime)
+    }
+    
     this.render()
 
     if(!this.gameOver){

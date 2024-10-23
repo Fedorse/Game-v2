@@ -1,5 +1,7 @@
 import {Sprite} from './Sprite.js'
+import { Animation } from './Animation.js';
 import { ProjectileWeapon } from './ProjectileWeapon.js';
+import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
 
 export class Player {
     constructor(game){
@@ -15,24 +17,14 @@ export class Player {
             y: 0
         }
         this.weapon = new ProjectileWeapon(game, this);
+        
+        // animations
+        const idleAnim = new Animation(playerIdleFrames, 200,'playerIdle')
+        const walkAnim = new Animation(playerWalkFrames, 200,'playerWalk')
         this.sprite = new Sprite({
-            idle: {
-                imageName: 'playerIdle',
-                frames: 4, 
-                frameWidth: this.width, 
-                frameHeight: this.height, 
-                frameY: 0, 
-                frameInterval: 200
-            },
-            walk: {
-                imageName: 'playerWalk',
-                frames: 4, 
-                frameWidth: this.width, 
-                frameHeight: this.height, 
-                frameY: 0, 
-                frameInterval: 200
-            }, 
-        }, this.game.resourceManager)
+                idle: idleAnim,
+                walk: walkAnim
+            }, this.game.resourceManager);
 
         // static stats
         this.maxHealth = 100

@@ -1,7 +1,6 @@
 import {Game} from './game.js';
 import {ResourceManager} from './ResourceManager.js'
 
-
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d')
 canvas.width = innerWidth

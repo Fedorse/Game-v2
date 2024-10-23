@@ -1,3 +1,6 @@
+import { Animation } from "./Animation"
+import { Sprite } from "./Sprite"
+import { expirenseOrbAnim } from "./animations/expirenseOrbAnim.js"
 
 export class ExperienceOrb {
     constructor(game, position){
@@ -5,13 +8,19 @@ export class ExperienceOrb {
         this.position = position,
         this.width = 32,
         this.height = 32,
-        this.toRemove = false,
+        this.toRemove = false;
+        //animation
+        const orbAnim = new Animation(expirenseOrbAnim, 200, 'experience');
+        this.sprite = new Sprite({
+                orb: orbAnim,
+            }, this.game.resourceManager);
 
+
+        this.sprite.setAnimation('orb')
         // stats exp
-        this.value = 20
-        this.speed = 80,
+        this.value = 20,
+        this.speed = 80;
 
-        this.img = this.game.resourceManager.getImage('experience')
     }
 
     update(deltaTime){
@@ -23,15 +32,15 @@ export class ExperienceOrb {
             this.position.x += (dx / distance) * this.speed * deltaTime
             this.position.y += (dy / distance) * this.speed * deltaTime
         }
-
+        this.sprite.update(deltaTime)
     }
 
     render(context){
-        context.drawImage(
-            this.img,
-            this.position.x  -this.game.camera.x,
-            this.position.y -this.game.camera.y,
-            this.width,
+        this.sprite.draw(
+            context, 
+            this.position.x -this.game.camera.x, 
+            this.position.y -this.game.camera.y, 
+            this.width, 
             this.height
         )
            // collision box-debug

@@ -1,6 +1,8 @@
 import { Sprite } from "./Sprite"
 import { ExperienceOrb } from "./ExperienceOrb"
 import { DamageText } from "./DamageText"
+import { Animation } from "./Animation"
+import { playerWalkFrames } from "./animations/playerAnim"
 
 export class Enemy { 
     constructor(game, position){
@@ -8,16 +10,11 @@ export class Enemy {
         this.width = 64,
         this.height = 64,
         this.position = position
+        //animations
+        const walkAnim = new Animation(playerWalkFrames, 200,'enemyWalk')
         this.sprite = new Sprite({
-            walk: {
-                imageName: 'enemyWalk',
-                frames: 4, 
-                frameWidth: this.width, 
-                frameHeight: this.height, 
-                frameY: 0, 
-                frameInterval: 100
-            }, 
-        }, this.game.resourceManager, 'walk')  
+                walk: walkAnim
+            }, this.game.resourceManager);
         
         //static stats 
         this.speed = 50

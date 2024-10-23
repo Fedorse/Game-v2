@@ -1,32 +1,29 @@
 export class Sprite {
-    constructor(animations, resourceManager, intitialAnimation = 'idle') {
-        this.animations = animations
-        this.currentAnimation = intitialAnimation
-        this.currentFrame = 0
-        this.frameTimer = 0
+    constructor(animations, resourceManager) {
+        this.animations = animations // obj animations
         this.resourceManager = resourceManager
+        this.currentAnimation = null
+    }
+
+    setAnimation(name){
+        if(this.animations[name]){
+            this.currentAnimation = this.animations[name]
+        } else {
+            console.error(`Animation ${name} not found`)
+        }
     }
 
     update(deltaTime){
-            //animation
-            const animation = this.animations[this.currentAnimation]
-            this.frameTimer += deltaTime * 1000 ;
-
-            if(this.frameTimer > animation.frameInterval){
-                this.currentFrame = (this.currentFrame + 1) % animation.frames
-                this.frameTimer = 0
-            }
+        if(this.currentAnimation){
+            this.currentAnimation.update(deltaTime)
+        }
     }
 
     draw(context, x, y, width, height, flipX = false ){
-
-        const animation = this.animations[this.currentAnimation]
-        const image = this.resourceManager.getImage(animation.imageName)
-        if(!image) {
-            console.error(`Image ${animation.imageName} not found`)
-        }
-
-        const frameX = this.currentFrame * animation.frameWidth
+        if(!this.currentAnimation) return
+        const imageName = this.currentAnimation.getImageName()
+        const image = this.resourceManager.getImage(imageName)
+        const frame = this.currentAnimation.getCurrentFrame()
         context.save()
         if(flipX){
             context.translate(x + width, y)
@@ -35,17 +32,16 @@ export class Sprite {
             context.translate(x, y)
         }
         context
-        .drawImage(image, frameX, animation.frameY, 
-            animation.frameWidth, animation.frameHeight, 
-            0, 0, 
-            width, height)
+        .drawImage(
+            image, 
+            frame.x, 
+            frame.y, 
+            frame.width, 
+            frame.height, 
+            0, 
+            0, 
+            width, 
+            height)
             context.restore()
     }
-    setAnimation(animationName){
-        if  (this.currentAnimation !== animationName && this.animations[animationName]){
-            this.currentAnimation = animationName
-            this.currentFrame = 0
-            this.frameTimer = 0
-    }
-}
 }

@@ -6,7 +6,8 @@ export class ProjectileWeapon extends Weapon {
   constructor(game, owner) {
     super(game, owner);
     this.name = 'standard projectile';
-    // level stats
+
+    // level weapon stats
     this.attackCooldown = 1; 
     this.projectileSpeed = 300; 
     this.projectileCount = 1; 

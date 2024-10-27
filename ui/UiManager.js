@@ -13,8 +13,8 @@ export class UiManager {
         context.fillStyle = 'white';
         context.font = '20px Arial';
         context.fillText(`level: ${this.player.level}`, 10, 40);
-        context.fillText(`weapon: ${this.player.weapon.name}`, 10, 60);
-        context.fillText(`level weapon: ${this.player.weapon.level}`, 10, 80);
+        // context.fillText(`weapon: ${this.player.weapon.name}`, 10, 60);
+        // context.fillText(`level weapon: ${this.player.weapon.level}`, 10, 80);
 
         this.renderTimer(context)
 

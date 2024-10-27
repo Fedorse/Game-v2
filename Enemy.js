@@ -1,6 +1,6 @@
 import { Sprite } from "./Sprite"
 import { ExperienceOrb } from "./ExperienceOrb"
-import { DamageText } from "./DamageText"
+import { DamageText } from "./ui/DamageText"
 import { Animation } from "./Animation"
 import { playerWalkFrames } from "./animations/playerAnim"
 

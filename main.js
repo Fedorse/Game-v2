@@ -1,5 +1,5 @@
 import {Game} from './game.js';
-import {ResourceManager} from './ResourceManager.js'
+import {ResourceManager} from './utils/ResourceManager.js'
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d')
@@ -14,7 +14,8 @@ const imagesLoad = [
     { name: 'enemyWalk', src: '../public/img/enemy/PIglet_walk.png' },
     { name: 'tileset', src: '../public/img/tileset.png' },
     {name: 'projectile', src: '../public/img/projectiles/explosion.png'},
-    {name : 'experience', src : '../public/img/ExpOrb.png'}
+    {name : 'experience', src : '../public/img/ExpOrb.png'},
+    {name: 'mele', src: '../public/img/mele.png'}
 ]
 
 resourceManager.loadImages(imagesLoad)

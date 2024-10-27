@@ -12,9 +12,9 @@ export class Projectile {
           };
 
         // animations
-        const projectileAnin = new Animation(projectileFireBall, 200, 'projectile')
+        const projectileAnim = new Animation(projectileFireBall, 200, 'projectile')
         this.sprite = new Sprite({
-                attack: projectileAnin,
+                attack: projectileAnim,
             }, this.game.resourceManager);
         this.sprite.setAnimation('attack')
         

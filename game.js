@@ -1,9 +1,9 @@
 import { Player } from './Player.js'
-import { InputHandler } from './InputHandler.js'
+import { InputHandler } from './utils/InputHandler.js'
 import { Spawner } from './Spawner.js'
 import { Camera } from './Camera.js'
 import { MapGenerator } from './MapGenerator.js'
-import { UiManager } from './UiManager.js'
+import { UiManager } from './ui/UiManager.js'
 
 
 export  class Game {
@@ -56,7 +56,7 @@ export  class Game {
  }
  
    update(deltaTime) {
-      this.enemies.forEach((enemy ) => {
+      this.enemies.forEach((enemy) => {
          enemy.update(deltaTime)
       })
 

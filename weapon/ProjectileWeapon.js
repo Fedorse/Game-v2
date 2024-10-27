@@ -1,6 +1,6 @@
 // ProjectileWeapon.js
 import { Weapon } from './Weapon.js';
-import { Projectile } from './Projectile.js';
+import { Projectile } from '../Projectile.js';
 
 export class ProjectileWeapon extends Weapon {
   constructor(game, owner) {
@@ -13,13 +13,13 @@ export class ProjectileWeapon extends Weapon {
     this.projectileCount = 1; 
     this.damage = 5
   }
-
+d
   attack() {
     if (this.attackTimer <= 0) {
       this.attackTimer = this.attackCooldown;
 
       // attack logic
-      const angle = Math.atan2(this.owner.lastDirection.y, this.owner.lastDirection.x);
+      const angle = Math.atan2(this.owner.lastDirection.y , this.owner.lastDirection.x);
       const angleStep = (Math.PI / 12); 
       const startAngle = angle - angleStep * (this.projectileCount - 1) / 2;
 

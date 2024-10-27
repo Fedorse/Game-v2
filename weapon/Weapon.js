@@ -9,6 +9,7 @@ export class Weapon {
       this.maxLevel = 6; 
       this.experience = 0; 
       this.nextLevelExperience = 10; 
+      this.sprite = null
 
       this.attackTimer = 0; 
     }
@@ -18,6 +19,19 @@ export class Weapon {
         this.attackTimer -= deltaTime;
       } else {
         this.attack();
+      }
+    }
+
+    render(context) {
+      if(this.sprite){
+        this.sprite.draw(
+          context,
+          x,
+          y,
+          this.width,
+          this.height,
+
+        )
       }
     }
   

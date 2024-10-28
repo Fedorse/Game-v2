@@ -55,7 +55,7 @@ export class Player {
 
     initWeapons(){
         this.weapons.push(new ProjectileWeapon(this.game, this))
-        this.weapons.push(new MeleWeapon(this.game, this))
+        // this.weapons.push(new MeleWeapon(this.game, this))
     }
     
         update(deltaTime){

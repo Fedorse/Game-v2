@@ -17,7 +17,9 @@ const imagesLoad = [
     {name : 'experience', src : '../public/assets/ExpOrb.png'},
     {name: 'mele', src: '../public/assets/mele.png'},
     {name: 'skeleton', src: '../public/assets/enemy/skeleton.png'},
-    {name: 'mushroom', src: '../public/assets/enemy/mushroom.png'}
+    {name: 'mushroom', src: '../public/assets/enemy/mushroom.png'},
+    {name: 'axe', src: '../public/assets/axe.png'}
+
 ]
 
 resourceManager.loadImages(imagesLoad)

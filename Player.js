@@ -1,8 +1,14 @@
 import {Sprite} from './Sprite.js'
 import { Animation } from './Animation.js';
-import { ProjectileWeapon } from './weapon/ProjectileWeapon.js';
+
 import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
-import { MeleWeapon } from './weapon/MeleWeapon.js';
+
+import { meleLikeBrotato } from './weapon/meleLikeBrotato.js';
+
+import { WeaponManager } from './weapon/WeaponManager.js';
+import { AxeWeapon } from './weapon/AxeWeapon.js';
+import { SwordWeapon } from './weapon/SwordWeapon.js';
+
 
 export class Player {
     constructor(game){
@@ -17,7 +23,6 @@ export class Player {
             x: 0,
             y: 0
         }
-        // this.weapon = new ProjectileWeapon(game, this);
         
         // animations
         const idleAnim = new Animation(playerIdleFrames, 200,'playerIdle')
@@ -28,7 +33,7 @@ export class Player {
             }, this.game.resourceManager);
 
         // static stats
-        this.maxHealth = 100
+        this.maxHealth = 1000
         this.speed = 130
         
         // level stats
@@ -37,7 +42,7 @@ export class Player {
         this.nextLevelUp = 30
 
         // weapon collection
-        this.weapons = []
+        this.weaponManager = new WeaponManager(this.game, this)
         this.initWeapons()
 
 
@@ -54,8 +59,10 @@ export class Player {
     }
 
     initWeapons(){
-        this.weapons.push(new ProjectileWeapon(this.game, this))
-        // this.weapons.push(new MeleWeapon(this.game, this))
+
+        this.weaponManager.addWeapon(SwordWeapon)
+        this.weaponManager.addWeapon(AxeWeapon)
+
     }
     
         update(deltaTime){
@@ -95,8 +102,7 @@ export class Player {
             }
 
             this.sprite.update(deltaTime)
-            // this.weapon.update(deltaTime);  
-            this.weapons.forEach(weapon => weapon.update(deltaTime))
+            this.weaponManager.update(deltaTime)
 
             this.checkExperience()
 
@@ -116,14 +122,14 @@ export class Player {
             )
             
             // collision box-debug
-            context.strokeStyle = 'blue';
-            context.strokeRect(
-                this.position.x -this.game.camera.x,
-                this.position.y -this.game.camera.y,
-                this.width,
-                this.height
-            );
-            this.weapons.forEach(weapon => weapon.render(context))
+            // context.strokeStyle = 'blue';
+            // context.strokeRect(
+            //     this.position.x -this.game.camera.x,
+            //     this.position.y -this.game.camera.y,
+            //     this.width,
+            //     this.height
+            // );
+            this.weaponManager.render(context)
  
         }
 
@@ -145,7 +151,7 @@ export class Player {
             this.experience = 0
             this.nextLevelUp += 100
             // this.weapon.gainExperience(100); // level weapon
-            this.weapons.forEach(weapon => weapon.gainExperience(100))
+            this.weaponManager.gainExperience(100)
         }
 
         takeDamage(damage){

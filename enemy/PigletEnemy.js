@@ -11,7 +11,7 @@ export class PigletEnemy extends BaseEnemy {
 
         this.name = 'piglet'
         this.speed = 50
-        this.maxHealth = 100
+        this.maxHealth = 10
         this.damage = 10
         this.attackCooldown = 1
         this.currentHealth = this.maxHealth

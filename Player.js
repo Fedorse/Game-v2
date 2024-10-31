@@ -1,12 +1,7 @@
 import {Sprite} from './Sprite.js'
 import { Animation } from './Animation.js';
-
 import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
-
-import { meleLikeBrotato } from './weapon/meleLikeBrotato.js';
-
 import { WeaponManager } from './weapon/WeaponManager.js';
-import { AxeWeapon } from './weapon/AxeWeapon.js';
 import { SwordWeapon } from './weapon/SwordWeapon.js';
 
 
@@ -59,10 +54,7 @@ export class Player {
     }
 
     initWeapons(){
-
         this.weaponManager.addWeapon(SwordWeapon)
-        this.weaponManager.addWeapon(AxeWeapon)
-
     }
     
         update(deltaTime){
@@ -120,15 +112,7 @@ export class Player {
                 this.height,
                 this.flipX
             )
-            
-            // collision box-debug
-            // context.strokeStyle = 'blue';
-            // context.strokeRect(
-            //     this.position.x -this.game.camera.x,
-            //     this.position.y -this.game.camera.y,
-            //     this.width,
-            //     this.height
-            // );
+
             this.weaponManager.render(context)
  
         }
@@ -150,7 +134,6 @@ export class Player {
             this.level ++
             this.experience = 0
             this.nextLevelUp += 100
-            // this.weapon.gainExperience(100); // level weapon
             this.weaponManager.gainExperience(100)
         }
 

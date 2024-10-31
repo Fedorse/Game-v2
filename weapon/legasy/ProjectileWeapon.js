@@ -1,6 +1,6 @@
 // ProjectileWeapon.js
-import { Weapon } from './Weapon.js';
-import { Projectile } from '../Projectile.js';
+// import { Weapon } from './Weapon.js';
+// import { Projectile } from '../ProjectileLegasy.js';
 
 export class ProjectileWeapon extends Weapon {
   constructor(game, owner) {

@@ -5,7 +5,8 @@ export class WeaponManager {
         this.game = game;
         this.owner = owner;
         this.weapons = [];
-        this.maxWeapons = 6;
+        this.maxWeapons = 10;
+        this.distanceFromPlayer = 50
     }
 
     addWeapon(WeaponClass) {
@@ -13,11 +14,11 @@ export class WeaponManager {
 
         const weapon = new WeaponClass(this.game, this.owner);
         
-        // Рассчитываем позицию для нового оружия
+        // position new weapon
         const angle = (2 * Math.PI / (this.weapons.length + 1)) * this.weapons.length;
-        weapon.offsetX = Math.cos(angle) * 50;
-        weapon.offsetY = Math.sin(angle) * 50;
-
+        weapon.offsetX = Math.cos(angle) * this.distanceFromPlayer;
+        weapon.offsetY = Math.sin(angle) * this.distanceFromPlayer;
+        weapon.baseAngle = angle;
         this.weapons.push(weapon);
         this.recalculatePositions();
 
@@ -27,8 +28,8 @@ export class WeaponManager {
         const totalWeapons = this.weapons.length;
         this.weapons.forEach((weapon, index) => {
             const angle = (2 * Math.PI / totalWeapons) * index;
-            weapon.offsetX = Math.cos(angle) * 50;
-            weapon.offsetY = Math.sin(angle) * 50;
+            weapon.offsetX = Math.cos(angle) * this.distanceFromPlayer;
+            weapon.offsetY = Math.sin(angle) * this.distanceFromPlayer;
         });
     }
 

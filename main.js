@@ -13,12 +13,15 @@ const imagesLoad = [
     { name: 'playerWalk', src: '../public/assets/player/Vinny_walk.png' },
     { name: 'piglet', src: '../public/assets/enemy/PIglet_walk.png' },
     { name: 'tileset', src: '../public/assets/tileset.png' },
-    {name: 'projectile', src: '../public/assets/projectiles/explosion.png'},
+    {name: 'projectile', src: '../public/assets/projectiles/projectile.png'},
     {name : 'experience', src : '../public/assets/ExpOrb.png'},
     {name: 'mele', src: '../public/assets/mele.png'},
     {name: 'skeleton', src: '../public/assets/enemy/skeleton.png'},
     {name: 'mushroom', src: '../public/assets/enemy/mushroom.png'},
-    {name: 'axe', src: '../public/assets/axe.png'}
+    {name: 'sword', src: '../public/assets/sword.png'},
+    {name: 'bow', src: '../public/assets/Bow02.png'}
+
+    
 
 ]
 

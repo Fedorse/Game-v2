@@ -1,55 +1,63 @@
 export class InputHandler {
-    constructor(game){
-        this.game = game
-        this.left = false,
-        this.right = false,
-        this.up = false, 
-        this.down = false
+    constructor(game) {
+        this.game = game;
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
 
-        document.addEventListener('keydown', event => {
-            switch(event.code){
+        // Обработка клавиш
+        document.addEventListener('keydown', (event) => {
+            switch (event.code) {
                 case 'ArrowLeft':
                 case 'KeyA':
-                    this.left = true
-                    break
+                    this.left = true;
+                    break;
                 case 'ArrowRight':
                 case 'KeyD':
-                    this.right = true
-                    break
+                    this.right = true;
+                    break;
                 case 'ArrowUp':
                 case 'KeyW':
-                    this.up = true
-                    break
+                    this.up = true;
+                    break;
                 case 'ArrowDown':
                 case 'KeyS':
-                    this.down = true
-                    break
+                    this.down = true;
+                    break;
                 case 'Space':
-                    this.game.pause()
-                    break
+                    this.game.pause();
+                    break;
             }
-        })
-        document.addEventListener('keyup', (event)=> {
-            switch(event.code){
+        });
+
+        document.addEventListener('keyup', (event) => {
+            switch (event.code) {
                 case 'ArrowLeft':
                 case 'KeyA':
-                    this.left = false
-                    break
+                    this.left = false;
+                    break;
                 case 'ArrowRight':
                 case 'KeyD':
-                    this.right = false
-                    break
+                    this.right = false;
+                    break;
                 case 'ArrowUp':
                 case 'KeyW':
-                    this.up = false
-                    break
+                    this.up = false;
+                    break;
                 case 'ArrowDown':
                 case 'KeyS':
-                    this.down = false
-                    break
-                
+                    this.down = false;
+                    break;
             }
-        })
-    }
+        });
 
+        // Обработка клика мыши
+        this.game.canvas.addEventListener('click', (event) => {
+            const rect = this.game.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            this.game.ui.handleMouseClick(x, y);
+        });
+    }
 }

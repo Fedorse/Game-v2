@@ -3,6 +3,7 @@ import { Animation } from './Animation.js';
 import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
 import { WeaponManager } from './weapon/WeaponManager.js';
 import { SwordWeapon } from './weapon/SwordWeapon.js';
+import { Bow } from './weapon/Bow.js';
 
 
 export class Player {
@@ -55,6 +56,7 @@ export class Player {
 
     initWeapons(){
         this.weaponManager.addWeapon(SwordWeapon)
+        this.weaponManager.addWeapon(Bow)
     }
     
         update(deltaTime){
@@ -135,6 +137,7 @@ export class Player {
             this.experience = 0
             this.nextLevelUp += 100
             this.weaponManager.gainExperience(100)
+            // this.game.ui.showUpgradeAugments()
         }
 
         takeDamage(damage){

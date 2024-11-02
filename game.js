@@ -6,7 +6,7 @@ import { MapGenerator } from './MapGenerator.js'
 import { UiManager } from './ui/UiManager.js'
 
 
-export  class Game {
+export class Game {
  constructor(canvas, context, resourceManager) {
     this.canvas = canvas
     this.context = context
@@ -25,13 +25,16 @@ export  class Game {
     this.gameOver = false
     this.elapsedTime = 0
     this.isPaused = false
-
  }
+
    start() {
+
    requestAnimationFrame(this.gameLoop.bind(this))
+
    }
 
    pause(){
+
       this.isPaused = !this.isPaused
    }
 
@@ -50,7 +53,6 @@ export  class Game {
     if(!this.gameOver){
         requestAnimationFrame(this.gameLoop.bind(this))
     } else  {
-      alert('game over');
       document.location.reload();
     }
  }

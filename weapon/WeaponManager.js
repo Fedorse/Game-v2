@@ -7,13 +7,15 @@ export class WeaponManager {
         this.weapons = [];
         this.maxWeapons = 10;
         this.distanceFromPlayer = 50
+        
     }
 
     addWeapon(WeaponClass) {
+    
         if (this.weapons.length >= this.maxWeapons) return;
 
         const weapon = new WeaponClass(this.game, this.owner);
-        
+            console.log(weapon)
         // position new weapon
         const angle = (2 * Math.PI / (this.weapons.length + 1)) * this.weapons.length;
         weapon.offsetX = Math.cos(angle) * this.distanceFromPlayer;

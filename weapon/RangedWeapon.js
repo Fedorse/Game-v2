@@ -6,54 +6,56 @@ export class RangedWeapon extends BaseWeapon {
         super(game, owner);
         this.attackRange = 300;
         this.attackCooldown = 0.5;
-        this.currentCooldown = 0;
+        this.damage = 1
+
+
         this.projectileSpeed = 300;
         this.projectileSprite = projectileSprite; // sprite of the projectile
-        
+
+        //recoil
+        this.recoilAmount = 5; 
+        this.recoilDuration = 0.1;
+        this.recoilTimer = 0
+        this.recoilOffsetX = 0
+        this.recoilOffsetY = 0
+
     }
 
-    checkAttack(deltaTime) {
-        if (this.currentCooldown > 0) {
-            this.currentCooldown -= deltaTime;
-            return;
+
+
+
+    handleAttack(deltaTime) {
+        const target = this.findTarget()
+
+        if(this.currentCooldown > 0){
+            this.currentCooldown -= deltaTime
         }
 
-        const target = this.findTarget();
-        if (target) {
-            this.rotationAngle = this.calculateRotationToTarget(
-                target.position.x + target.width / 2,
-                target.position.y + target.height / 2
-            );
-            this.shoot(target);
-            this.currentCooldown = this.attackCooldown;
-        }else {
-            this.rotationAngle = this.baseAngle;
+        if(target && this.currentCooldown <= 0){
+            
+            this.shoot(target)
+            this.currentCooldown = this.attackCooldown
+            this.recoilTimer = this.recoilDuration
+        }
+
+        // recoil 
+        if(this.recoilTimer > 0){
+            this.recoilTimer -= deltaTime
+            const recoilProgress = this.recoilTimer / this.recoilDuration
+            const recoilOffset = this.recoilAmount * recoilProgress
+            this.recoilOffsetX = Math.cos(this.rotationAngle + Math.PI) * recoilOffset
+            this.recoilOffsetY = Math.sin(this.rotationAngle + Math.PI) * recoilOffset
+        } else {
+            this.recoilOffsetX = 0
+            this.recoilOffsetY = 0
         }
     }
-
-    findTarget() {
-        let nearestEnemy = null;
-        let minDistance = this.attackRange;
-
-        this.game.enemies.forEach(enemy => {
-            const dx = enemy.position.x - this.position.x;
-            const dy = enemy.position.y - this.position.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestEnemy = enemy;
-            }
-        });
-
-        return nearestEnemy;
+    updatePosition() {
+        this.position.x = this.owner.position.x + this.owner.width / 2 + this.offsetX + this.recoilOffsetX ;
+        this.position.y = this.owner.position.y + this.owner.height / 2 + this.offsetY + this.recoilOffsetY ;
     }
-
-    shoot(target) {
-        const dx = target.position.x - this.position.x;
-        const dy = target.position.y - this.position.y;
-        const angle = Math.atan2(dy, dx);
-
+    shoot(target){
+        const angle = this.rotationAngle
         const projectile = new Projectile(
             this.game,
             this.position.x,
@@ -63,17 +65,26 @@ export class RangedWeapon extends BaseWeapon {
             this.damage,
             this.projectileSprite
         );
-
         this.game.projectiles.push(projectile);
-    }
 
-    render(context) {
-        context.save();
-        context.translate(
-            this.position.x - this.game.camera.x, 
-            this.position.y - this.game.camera.y);
-        context.rotate(this.rotationAngle);
-        context.drawImage(this.sprite, -16, -16, 32, 32);
-        context.restore();
+    }
+    upgrade() {
+        switch (this.level) {
+            case 2:
+                this.damage += 1;
+                break;
+            case 3:
+                this.attackCooldown *= 0.9;
+                break;
+            case 4:
+                this.damage += 2;
+                break;
+            case 5:
+                this.attackCooldown *= 0.9;
+                break;
+            case 6:
+                this.damage += 3;
+                break;
+        }
     }
 }

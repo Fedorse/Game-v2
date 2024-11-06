@@ -23,6 +23,7 @@ export class BaseEnemy {
         this.flipX = false
         this.damageTexts = []
         this.toRemove = false
+        this.isHit = false
 
         //animations
         this.animationSetup()
@@ -35,7 +36,7 @@ export class BaseEnemy {
 
     update(deltaTime){
         if (this.toRemove) return;
-
+        this.isHit = false
         this.updateDamageTexts(deltaTime)
         this.moveTowardPlayer(deltaTime)
         this.handleAttack(deltaTime)

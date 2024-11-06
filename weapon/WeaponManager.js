@@ -32,6 +32,7 @@ export class WeaponManager {
             const angle = (2 * Math.PI / totalWeapons) * index;
             weapon.offsetX = Math.cos(angle) * this.distanceFromPlayer;
             weapon.offsetY = Math.sin(angle) * this.distanceFromPlayer;
+            weapon.baseAngle = angle;
         });
     }
 

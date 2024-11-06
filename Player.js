@@ -3,7 +3,11 @@ import { Animation } from './Animation.js';
 import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
 import { WeaponManager } from './weapon/WeaponManager.js';
 import { SwordWeapon } from './weapon/SwordWeapon.js';
+import {Mace} from './weapon/Mace.js';
 import { Bow } from './weapon/Bow.js';
+import { Hammer } from './weapon/Hammer.js';
+import { Shotgun } from './weapon/Shotgun.js';
+import { AK } from './weapon/AK.js';
 
 
 export class Player {
@@ -56,7 +60,13 @@ export class Player {
 
     initWeapons(){
         this.weaponManager.addWeapon(SwordWeapon)
-        this.weaponManager.addWeapon(Bow)
+        // this.weaponManager.addWeapon(Bow)
+        this.weaponManager.addWeapon(Mace)
+        this.weaponManager.addWeapon(Hammer)
+        this.weaponManager.addWeapon(AK)
+        this.weaponManager.addWeapon(Shotgun)
+
+
     }
     
         update(deltaTime){
@@ -106,6 +116,8 @@ export class Player {
 
 
         render(context){
+            this.weaponManager.render(context)
+
             this.sprite.draw(
                 context, 
                 this.position.x -this.game.camera.x, 
@@ -115,7 +127,6 @@ export class Player {
                 this.flipX
             )
 
-            this.weaponManager.render(context)
  
         }
 

@@ -1,6 +1,6 @@
-import { Sprite } from "./Sprite";
-import { Animation } from "./Animation";
-import { projectileFireBall } from "./animations/projectileFireBall";
+import { Sprite } from "../../Sprite";
+import { Animation } from "../../Animation";
+import { projectileFireBall } from "../../animations/projectileFireBall";
 export class Projectile {
     constructor(game, position, direction, speed, damage){
         this.game = game,

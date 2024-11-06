@@ -19,7 +19,19 @@ const imagesLoad = [
     {name: 'skeleton', src: '../public/assets/enemy/skeleton.png'},
     {name: 'mushroom', src: '../public/assets/enemy/mushroom.png'},
     {name: 'sword', src: '../public/assets/sword.png'},
-    {name: 'bow', src: '../public/assets/Bow02.png'}
+    {name: 'bow', src: '../public/assets/Bow02.png'},
+    {name: 'arrow', src: '../public/assets/projectiles/Arrow01.png'},
+    {name: 'hamer', src: '../public/assets/Hammer01.png'},
+    {name: 'mace', src: '../public/assets/Mace01.png'},
+    {name: 'pistolShoot', src: '../public/assets/projectiles/PistolAmmoBig.png'},
+    {name: 'gunShoot', src: '../public/assets/projectiles/ShotgunShellBig.png'},
+    {name: 'AK', src: '../public/assets/AK47.png'},
+    {name: 'shootGun', src: '../public/assets/SawedOffShotgun.png'},
+
+
+
+    
+
 
     
 

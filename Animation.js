@@ -1,6 +1,6 @@
 export class Animation {
     constructor(frames, frameInterval, imageName){
-        this.frames = frames;// frames data
+        this.frames = frames;// collection of frames
         this.frameInterval = frameInterval;
         this.imageName = imageName;
         this.currentFrameIndex = 0;

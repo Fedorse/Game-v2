@@ -9,6 +9,7 @@ export class ExperienceOrb {
         this.width = 32,
         this.height = 32,
         this.toRemove = false;
+        
         //animation
         const orbAnim = new Animation(expirenseOrbAnim, 200, 'experience');
         this.sprite = new Sprite({

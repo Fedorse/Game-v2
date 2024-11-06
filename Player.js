@@ -30,6 +30,7 @@ export class Player {
 
         // static stats
         this.maxHealth = 1000
+        this.currentHealth = this.maxHealth
         this.speed = 130
         
         // level stats
@@ -41,17 +42,16 @@ export class Player {
         this.weaponManager = new WeaponManager(this.game, this)
         this.initWeapons()
 
-
+        //state
         this.flipX = false
 
-        this.currentHealth = this.maxHealth
-
-        // direction weapon
         this.lastDirection = {
             x: 1,
             y: 0
         }
-        
+
+  
+            
     }
 
     initWeapons(){

@@ -1,6 +1,6 @@
 export class Sprite {
     constructor(animations, resourceManager) {
-        this.animations = animations // obj animations
+        this.animations = animations // collection of animations
         this.resourceManager = resourceManager
         this.currentAnimation = null
     }

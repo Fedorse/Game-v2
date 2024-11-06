@@ -52,7 +52,7 @@ export class InputHandler {
             }
         });
 
-        // Обработка клика мыши
+        // click event
         this.game.canvas.addEventListener('click', (event) => {
             const rect = this.game.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;

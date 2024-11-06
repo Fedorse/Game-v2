@@ -58,9 +58,10 @@ export class Game {
  }
  
    update(deltaTime) {
-      this.enemies.forEach((enemy) => {
-         enemy.update(deltaTime)
-      })
+
+   this.enemies.forEach((enemy) => {
+      enemy.update(deltaTime)
+   })
 
    this.experienceOrbs.forEach((orb, index)=> {
       orb.update(deltaTime)

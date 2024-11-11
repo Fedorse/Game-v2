@@ -44,7 +44,6 @@ export class BaseWeapon {
   }
 
   handleAttack(deltaTime) {
-        //abstract method
   }
   rotateTowardsTarget(){
     const target = this.findTarget();

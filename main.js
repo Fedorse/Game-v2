@@ -27,13 +27,10 @@ const imagesLoad = [
     {name: 'gunShoot', src: '../public/assets/projectiles/ShotgunShellBig.png'},
     {name: 'AK', src: '../public/assets/AK47.png'},
     {name: 'shootGun', src: '../public/assets/SawedOffShotgun.png'},
-
-
-
-    
-
-
-    
+    {name: 'atlas', src: '../public/assets/Atlas.png'},
+    {name: 'stone', src: '../public/assets/Stone.png'},
+    {name: 'tree', src: '../public/assets/tree.png'},
+    {name: 'chest', src: '../public/assets/chest.png'}, 
 
 ]
 

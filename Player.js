@@ -70,6 +70,8 @@ export class Player {
     }
     
         update(deltaTime){
+            this.previousPosition = { x: this.position.x, y: this.position.y };
+
             const input = this.game.inputHandler // input handler
 
             this.velocity.x = 0
@@ -86,7 +88,6 @@ export class Player {
             }
             if(input.up) this.velocity.y = -1
             if(input.down) this.velocity.y = 1
-
 
             // last direction (for weapon)
             const moving = this.velocity.x !== 0 || this.velocity.y !== 0
@@ -112,6 +113,18 @@ export class Player {
 
             this.position.x += this.velocity.x * this.speed * deltaTime
             this.position.y += this.velocity.y * this.speed * deltaTime
+
+            //collision border map
+            this.position.x = Math.max(0 + this.width / 2, Math.min(
+                this.position.x,
+                this.game.mapGenerator.mapWidthInTiles * this.game.mapGenerator.tileWidth - this.width 
+            ));
+            
+            // Ограничение по Y
+            this.position.y = Math.max(0 + this.height / 2, Math.min(
+                this.position.y,
+                this.game.mapGenerator.mapHeightInTiles * this.game.mapGenerator.tileHeight - this.height 
+            ));
         }
 
 

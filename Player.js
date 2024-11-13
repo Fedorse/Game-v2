@@ -70,7 +70,7 @@ export class Player {
     }
     
         update(deltaTime){
-            this.previousPosition = { x: this.position.x, y: this.position.y };
+            // this.previousPosition = { x: this.position.x, y: this.position.y };
 
             const input = this.game.inputHandler // input handler
 
@@ -109,8 +109,6 @@ export class Player {
             this.sprite.update(deltaTime)
             this.weaponManager.update(deltaTime)
 
-            this.checkExperience()
-
             this.position.x += this.velocity.x * this.speed * deltaTime
             this.position.y += this.velocity.y * this.speed * deltaTime
 
@@ -143,18 +141,14 @@ export class Player {
  
         }
 
-        checkExperience(){
-            this.game.experienceOrbs.forEach((orb, index)=> {
-                if(this.isColliding(orb)){
-                    this.game.experienceOrbs.splice(index, 1)
-                    this.experience += orb.value
-
-                }
-                if(this.experience >= this.nextLevelUp){
-                    this.levelUp()
-                }
-            })
+        gainExperience(amount){
+            this.experience += amount
+            if(this.experience >= this.nextLevelUp){
+                this.levelUp()
+            }
         }
+
+
 
         levelUp(){
             this.level ++
@@ -171,17 +165,6 @@ export class Player {
             }
         }
         die(){
-            this.game.gameOver = true
-        }
-
-        //collision
-        isColliding(obj) {
-            return (
-                this.position.x < obj.position.x + obj.width &&
-                this.position.x + this.width > obj.position.x &&
-                this.position.y < obj.position.y + obj.height &&
-                this.position.y + this.height > obj.position.y
-            );
-        }
-        
+            this.game.gameState.isGameOver = true
+        }    
 }

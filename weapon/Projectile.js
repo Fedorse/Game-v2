@@ -14,24 +14,8 @@ export class Projectile {
     update(deltaTime) {
         this.position.x += this.velocity.x * deltaTime;
         this.position.y += this.velocity.y * deltaTime;
-
-        // Проверка столкновений
-        this.game.enemies.forEach(enemy => {
-            if (this.checkCollision(enemy)) {
-                enemy.takeDamage(this.damage);
-                this.toRemove = true;
-            }
-        });
     }
 
-    checkCollision(enemy) {
-        return (
-            this.position.x < enemy.position.x + enemy.width &&
-            this.position.x + this.width > enemy.position.x &&
-            this.position.y < enemy.position.y + enemy.height &&
-            this.position.y + this.height > enemy.position.y
-        );
-    }
 
     render(context) {
         context.save();

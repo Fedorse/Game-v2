@@ -62,7 +62,7 @@ export class BaseWeapon {
     let nearestEnemy = null;
     let minDistance = Infinity; // Устанавливаем минимальную дистанцию как бесконечность
 
-    this.game.enemies.forEach(enemy => {
+    this.game.gameObjects.enemies.forEach(enemy => {
         const distance = this.calculateDistance(this.position, enemy.position);
         if(distance < minDistance){
             minDistance = distance;

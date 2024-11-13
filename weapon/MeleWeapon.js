@@ -35,8 +35,6 @@ export class MeleeWeapon extends BaseWeapon {
                 this.isReturning = false
                 this.isAttacking = false
             }
-            this.checkEnemyHit()
-            this.checkChestHit()
         } else if (this.isReturning){
             //back weapon to player
             const directionBack = {
@@ -85,28 +83,6 @@ export class MeleeWeapon extends BaseWeapon {
         } else {
             this.currentCooldown -= deltaTime
         }
-    }
-    
-
-    checkEnemyHit(){
-        this.game.enemies.forEach(enemy => {
-            const distance = this.calculateDistance(this.position, enemy.position)
-            if(distance < enemy.width / 2){
-                if(!enemy.isHit){
-                    enemy.takeDamage(this.damage)
-                    enemy.isHit = true
-                }
-            }
-        })
-    }
-    checkChestHit() {
-        console.log('Проверка на попадание по сундуку');
-        this.game.mapObjects.forEach(object => {
-            if (object instanceof MapChest && this.calculateDistance(this.position, object.position) < object.width / 2) {
-                console.log('Попадание по сундуку');
-                object.takeDamage(this.damage);
-            }
-        });
     }
 
     upgrade(){

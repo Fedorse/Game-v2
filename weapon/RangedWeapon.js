@@ -65,7 +65,7 @@ export class RangedWeapon extends BaseWeapon {
             this.damage,
             this.projectileSprite
         );
-        this.game.projectiles.push(projectile);
+        this.game.addProjectile(projectile);
 
     }
     upgrade() {

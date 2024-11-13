@@ -18,13 +18,14 @@ export class MapGenerator {
     this.mapHeightInTiles = 1000;
 
     this.mapData = [];
-    this.mapObjects = []
 
     this.generateMapData();
     this.initializeMapObjects();
   }
 
   initializeMapObjects(){
+
+    this.game.gameObjects.mapObjects = []
     const stoneSprite = this.game.resourceManager.getImage('stone')
 
     const numberOfStones = 400;
@@ -32,7 +33,7 @@ export class MapGenerator {
     for(let i = 0; i < numberOfStones; i++) {
       const position = this.getRandomPosition();
       const stone = new MapStone(this.game, position.x, position.y, stoneSprite);
-      this.mapObjects.push(stone);
+      this.game.gameObjects.mapObjects.push(stone);
     }
 
     const treeSprite = this.game.resourceManager.getImage('tree')
@@ -40,15 +41,15 @@ export class MapGenerator {
     for(let i = 0; i < numberOfTrees; i++) {
       const position = this.getRandomPosition();
       const tree = new MapTree(this.game, position.x, position.y, treeSprite);
-      this.mapObjects.push(tree);
+      this.game.gameObjects.mapObjects.push(tree);
     }
 
     const chestSprite = this.game.resourceManager.getImage('chest')
-    const numberOfChests = 30;
+    const numberOfChests = 3000;
     for(let i = 0; i < numberOfChests; i++) {
       const position = this.getRandomPosition();
       const chest = new MapChest(this.game, position.x, position.y, chestSprite);
-      this.game.enemies.push(chest);
+      this.game.gameObjects.mapObjects.push(chest);
     }
   }
 
@@ -86,17 +87,21 @@ export class MapGenerator {
   }
 
   drawTile(tileInfo, x, y, context, camera) {
+
+    context.imageSmoothingEnabled = false;
     const tileX = tileInfo.col * this.tileWidth;
     const tileY = tileInfo.row * this.tileHeight;
 
+    const drawX = Math.floor(x - camera.x);
+    const drawY = Math.floor(y - camera.y);
     context.drawImage(
       this.tileSetImage,
       tileX,
       tileY,
       this.tileWidth,
       this.tileHeight,
-      x - camera.x,
-      y - camera.y,
+      drawX,
+      drawY,
       this.tileWidth,
       this.tileHeight
     );

@@ -8,14 +8,18 @@ export class EnemyFactory {
     }
 
     createEnemy(type, position){
+        let enemy = null
         switch(type){
             case 'Piglet':
-                return new PigletEnemy(this.game, position)
+                 enemy = new PigletEnemy(this.game, position)
+                 break
             case 'Skeleton':
-                return new SkeletonEnemy(this.game, position)
+                enemy = new SkeletonEnemy(this.game, position)
+                break
             case 'Mushroom':
-                return new MushroomEnemy(this.game, position)
-
+                enemy = new MushroomEnemy(this.game, position)
+                break
         }
+        return enemy
     }
 }

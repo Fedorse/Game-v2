@@ -22,7 +22,7 @@ export class Spawner {
     }
     update(deltaTime) {
         this.spawnTimer += deltaTime
-        const elapsedTime = this.game.elapsedTime
+        const elapsedTime = this.game.gameState.elapsedTime
 
         this.checkForNewEnemyTypes(elapsedTime);
 
@@ -59,7 +59,7 @@ export class Spawner {
         const spawnPosition = this.getSpawnPosition();
         const enemyType = this.chooseEnemyType();
         const enemy = this.enemyFactory.createEnemy(enemyType, spawnPosition);
-        this.game.enemies.push(enemy);
+        this.game.addEnemy(enemy);
     }
 
     chooseEnemyType() {

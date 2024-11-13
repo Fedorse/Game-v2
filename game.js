@@ -4,6 +4,7 @@ import { Spawner } from './Spawner.js'
 import { Camera } from './Camera.js'
 import { MapGenerator } from './map/MapGenerator.js'
 import { UiManager } from './ui/UiManager.js'
+import {CollisionManager} from './utils/CollisionManager.js'
 
 
 export class Game {
@@ -11,134 +12,163 @@ export class Game {
     this.canvas = canvas
     this.context = context
     this.resourceManager = resourceManager
-    this.player = new Player(this)
-    this.inputHandler = new InputHandler(this)
-    this.spawner = new Spawner(this)
-    this.ui = new UiManager(this, this.player)
-    this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
-    this.enemies = []
-    this.mapGenerator = new MapGenerator(this);
-    this.mapObjects = this.mapGenerator.mapObjects
-    this.experienceOrbs = []
-    this.projectiles = []
+
+    // game state 
+    this.gameState = {
+         isPaused: false,
+         isGameOver: false,
+         elapsedTime: 0,
+         difficulty: 1,
+         score: 1
+    }
+
+    // systems parameters 
     this.lastTime = 0
     this.deltaTime = 0
-    this.gameOver = false
-    this.elapsedTime = 0
-    this.isPaused = false
+
+    //game obj collections
+    this.gameObjects = {
+      enemies: [],
+      projectiles: [],
+      experienceOrbs: [],
+      mapObjects: []
+    }
+    this.initializeSystems()
+    this.initialGameObjects()
  }
 
+   initializeSystems(){
+      this.inputHandler = new InputHandler(this)
+      this.collisionManager = new CollisionManager(this)
+      this.camera = new Camera(0, 0, canvas.width, canvas.height, this)
+
+   }
+
+   initialGameObjects(){
+      this.mapGenerator = new MapGenerator(this);
+      this.player = new Player(this)
+      this.ui = new UiManager(this, this.player)
+
+      this.spawner = new Spawner(this)
+   }
+
+
    start() {
-
-   requestAnimationFrame(this.gameLoop.bind(this))
-
+      this.gameState.isPaused = false
+      this.gameState.isGameOver = false
+      requestAnimationFrame(this.gameLoop.bind(this))
    }
-
-   pause(){
-
-      this.isPaused = !this.isPaused
-   }
-
 
  gameLoop(timeStamp){
-    this.deltaTime = (timeStamp - this.lastTime) / 1000
-    this.lastTime = timeStamp
+    this.calculateDeltaTime(timeStamp)
 
-    if(!this.isPaused){
-       this.elapsedTime += this.deltaTime
+    if(!this.gameState.isPaused) {
        this.update(this.deltaTime)
     }
     
     this.render()
 
-    if(!this.gameOver){
+    if(!this.gameState.isGameOver){
         requestAnimationFrame(this.gameLoop.bind(this))
-    } else  {
-      document.location.reload();
     }
  }
- checkCollisions() {
-   this.mapObjects.forEach(object => {
-     if (object.isSolid && this.checkCollision(this.player, object)) {
-       this.resolveCollision(this.player, object);
-     }
-   });
+
+ calculateDeltaTime(timeStamp){
+   this.deltaTime = (timeStamp - this.lastTime) / 1000
+   this.lastTime = timeStamp
  }
 
-
- checkCollision(obj1, obj2) {
-   return (
-     obj1.position.x < obj2.position.x + obj2.width &&
-     obj1.position.x + obj1.width > obj2.position.x &&
-     obj1.position.y < obj2.position.y + obj2.height &&
-     obj1.position.y + obj1.height > obj2.position.y
-   );
- }
-
- resolveCollision(player, object) {
-   const dx = (player.position.x + player.width / 2) - (object.position.x + object.width / 2);
-   const dy = (player.position.y + player.height / 2) - (object.position.y + object.height / 2);
-
-   const width = (player.width + object.width) / 2;
-   const height = (player.height + object.height) / 2;
-   const crossWidth = width * dy;
-   const crossHeight = height * dx;
-
-   if (Math.abs(crossWidth) > Math.abs(crossHeight)) {
-     if (crossWidth > 0) {
-       player.position.y = object.position.y + object.height;
-     } else {
-       player.position.y = object.position.y - player.height;
-     }
-   } else {
-     if (crossHeight > 0) {
-       player.position.x = object.position.x + object.width;
-     } else {
-       player.position.x = object.position.x - player.width;
-     }
-   }
- }
  
    update(deltaTime) {
+      if(this.gameState.isGameOver) return
 
-   this.enemies.forEach((enemy) => {
-      enemy.update(deltaTime)
+      this.gameState.elapsedTime += deltaTime
+
+      this.updateGameObjects(deltaTime)
+
+      this.collisionManager.update()
+      
+      this.cleanupObjects()
+
+      this.camera.follow(this.player)
+
+ }
+
+ updateGameObjects(deltaTime){
+   this.player.update(deltaTime)
+
+   Object.values(this.gameObjects).forEach(collection => {
+      collection.forEach(object => object.update(deltaTime))
    })
+   this.spawner.update(deltaTime)
+ }
 
-   this.experienceOrbs.forEach((orb, index)=> {
-      orb.update(deltaTime)
-      if(orb.toRemove){
-         this.experienceOrbs.splice(index, 1)
-      }
-   })
-
-   this.projectiles.forEach((projectil, index) => {
-      projectil.update(deltaTime)
-      if(projectil.toRemove){
-         this.projectiles.splice(index, 1)
-      }
-   })
-   this.mapObjects.forEach(object => object.update(deltaTime));
-
-    this.enemies = this.enemies.filter(enemy => !enemy.toRemove)
-    this.mapObjects = this.mapObjects.filter(object => !object.toRemove)
-    this.checkCollisions()
-    this.player.update(deltaTime)
-    this.camera.follow(this.player)
-    this.spawner.update(deltaTime)
-    this.ui.update(this.player)
+ cleanupObjects(){
+   for(const [key, collection] of Object.entries(this.gameObjects)){
+      this.gameObjects[key] = collection.filter(object => !object.toRemove)
+   }
  }
 
  // render game objects
  render(){
-
-   this.mapGenerator.generateMap(this.context, this.camera); 
-   this.mapObjects.forEach(object => object.render(this.context))
-   this.player.render(this.context) 
-   this.enemies.forEach(enemy => enemy.render(this.context)) 
-   this.experienceOrbs.forEach(orb => orb.render(this.context)) 
-   this.projectiles.forEach(projectil => projectil.render(this.context))
+   this.context.clearRect(0, 0 , this.canvas.width, this.canvas.height)
+   this.mapGenerator.generateMap(this.context, this.camera);
+   this.renderGameObjects()
    this.ui.render(this.context)
  }
+
+ renderGameObjects() {
+   // Создаем массив всех объектов для сортировки по Y
+   const allObjects = [
+       ...this.gameObjects.mapObjects,
+       ...this.gameObjects.experienceOrbs,
+       ...this.gameObjects.enemies,
+       this.player,
+       ...this.gameObjects.projectiles
+   ].filter(obj => obj != null);
+
+   // Сортируем объекты по Y координате для правильного наложения
+   allObjects
+       .sort((a, b) => a.position.y - b.position.y)
+       .forEach(obj => obj.render(this.context));
+}
+
+    // Вспомогательные методы для управления состоянием
+    pause() {
+      this.gameState.isPaused = true;
+  }
+
+  resume() {
+      this.gameState.isPaused = false;
+  }
+
+  togglePause() {
+      this.gameState.isPaused = !this.gameState.isPaused;
+  }
+
+  gameOver() {
+      this.gameState.isGameOver = true;
+  }
+
+  // Методы для управления игровыми объектами
+  addEnemy(enemy) {
+      this.gameObjects.enemies.push(enemy);
+  }
+
+  addProjectile(projectile) {
+      this.gameObjects.projectiles.push(projectile);
+  }
+
+  addExperienceOrb(orb) {
+      this.gameObjects.experienceOrbs.push(orb);
+  }
+
+  removeGameObject(object, collectionName) {
+      const index = this.gameObjects[collectionName].indexOf(object);
+      if (index !== -1) {
+          this.gameObjects[collectionName].splice(index, 1);
+      }
+  }
+
 }
 

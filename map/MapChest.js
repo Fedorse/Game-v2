@@ -22,6 +22,6 @@ export class MapChest extends MapObj {
         this.toRemove = true
         const experienceValue = 20
         const orb = new ExperienceOrb(this.game, this.position, experienceValue)
-        this.game.experienceOrbs.push(orb)
+        this.game.addExperienceOrb(orb)
     }
 }

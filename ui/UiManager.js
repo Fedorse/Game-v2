@@ -106,7 +106,7 @@ export class UiManager {
 
 
     rednderPause(context){
-        if(this.game.isPaused){
+        if(this.game.gameState.isPaused){
             context.fillStyle = 'rgba(0, 0, 0, 0.5)'
             context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height)
             context.fillStyle = 'white'
@@ -117,7 +117,7 @@ export class UiManager {
 
 
     renderTimer(context){
-        const timer = this.game.elapsedTime
+        const timer = this.game.gameState.elapsedTime
         const minutes = Math.floor(timer / 60)
         const seconds = Math.floor(timer % 60)
         const timeString = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`

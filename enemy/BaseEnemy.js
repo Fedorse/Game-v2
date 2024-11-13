@@ -84,7 +84,7 @@ export class BaseEnemy {
         this.spawnExperienceOrb()
     }
     spawnExperienceOrb(){
-        this.game.experienceOrbs.push(new ExperienceOrb(this.game, this.position)
+        this.game.addExperienceOrb(new ExperienceOrb(this.game, this.position)
         )
     }
 

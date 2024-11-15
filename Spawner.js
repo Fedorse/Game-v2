@@ -51,7 +51,6 @@ export class Spawner {
     activateEnemyType(type) {
         if (!this.activeEnemyTypes.includes(type)) {
             this.activeEnemyTypes.push(type);
-            console.log(`new enemy type: ${type}`);
         }
     }
     
@@ -78,6 +77,5 @@ export class Spawner {
     // dicrease spawn interval
     increaseDifficulty(){
         this.spawnInterval = Math.max(this.minSpawnInterval, this.spawnInterval - 0.1)
-        console.log(`new spawn enemy: ${ this.spawnInterval } sec`) 
     }
 }

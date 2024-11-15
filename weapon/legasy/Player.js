@@ -1,13 +1,13 @@
-import {Sprite} from './Sprite.js'
-import { Animation } from './Animation.js';
-import { playerIdleFrames, playerWalkFrames } from './animations/playerAnim.js';
-import { WeaponManager } from './weapon/WeaponManager.js';
-import { SwordWeapon } from './weapon/SwordWeapon.js';
-import {Mace} from './weapon/Mace.js';
-import { Bow } from './weapon/Bow.js';
-import { Hammer } from './weapon/Hammer.js';
-import { Shotgun } from './weapon/Shotgun.js';
-import { AK } from './weapon/AK.js';
+import {Sprite} from '../../Sprite.js'
+import { Animation } from '../../Animation.js';
+import { playerIdleFrames, playerWalkFrames } from '../../animations/playerAnim.js';
+import { WeaponManager } from '../WeaponManager.js';
+import { SwordWeapon } from '../SwordWeapon.js';
+import {Mace} from '../Mace.js';
+import { Bow } from '../Bow.js';
+import { Hammer } from '../Hammer.js';
+import { Shotgun } from '../Shotgun.js';
+import { AK } from '../AK.js';
 
 
 export class Player {

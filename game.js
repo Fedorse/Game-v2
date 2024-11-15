@@ -1,9 +1,11 @@
-import { Player } from './Player.js'
+// import { Player } from './Player.js'
 import { InputHandler } from './utils/InputHandler.js'
 import { Spawner } from './Spawner.js'
 import { Camera } from './Camera.js'
 import { MapGenerator } from './map/MapGenerator.js'
 import { UiManager } from './ui/UiManager.js'
+import { Warrior } from './characters/Warrior.js'
+import { Hunter } from './characters/Hunter.js'
 
 
 export class Game {
@@ -11,7 +13,16 @@ export class Game {
     this.canvas = canvas
     this.context = context
     this.resourceManager = resourceManager
-    this.player = new Player(this)
+    const characterType = 'warrior'
+    switch(characterType){
+        case 'warrior':
+            this.player = new Warrior(this)
+            break
+        case 'hunter':
+            this.player = new Hunter(this)
+            break
+    }
+    // this.player = new Player(this)
     this.inputHandler = new InputHandler(this)
     this.spawner = new Spawner(this)
     this.ui = new UiManager(this, this.player)

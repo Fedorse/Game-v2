@@ -31,6 +31,9 @@ const imagesLoad = [
     {name: 'stone', src: '../public/assets/Stone.png'},
     {name: 'tree', src: '../public/assets/tree.png'},
     {name: 'chest', src: '../public/assets/chest.png'}, 
+    {name: 'IdleHunter', src: '../public/assets/IdleHunter.png'}, 
+    {name: 'RunHunter', src: '../public/assets/RunHunter.png'}, 
+
 
 ]
 

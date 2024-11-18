@@ -15,7 +15,7 @@ export class UiManager {
         // debug info ui
         context.fillStyle = 'white';
         context.font = '20px Arial';
-        context.fillText(`level: ${this.player.level}`, 10, 40);
+        context.fillText(`level: ${this.player.stats.level}`, 10, 40);
         this.renderTimer(context)
         // health bar player ui
         if(this.game.player.currentHealth !== this.game.player.maxHealth){
@@ -128,8 +128,8 @@ export class UiManager {
     }
 
     renderExperienceBar(context){
-        const currentExperience = this.player.experience
-        const nextLevelExp = this.player.nextLevelUp
+        const currentExperience = this.player.stats.experience
+        const nextLevelExp = this.player.stats.nextLevelUp
         const barWidth = this.game.canvas.width - 20
         const barHeight = 10
 

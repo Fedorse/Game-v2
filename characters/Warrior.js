@@ -15,8 +15,8 @@ export class Warrior extends Entity{
         this.height = 64
 
         this.stats = {
-            maxHealth: 120,
-            currentHealth: this.maxHealth,
+            maxHealth: 1000,
+            currentHealth: 1000,
             speed: 100,
             defence: 10,
             level: 1,
@@ -53,7 +53,7 @@ export class Warrior extends Entity{
     }
 
     update(deltaTime){
-        this.stateMachine.update(deltaTime)
+        this.stateMachine.update(deltaTime);
 
         this.weaponManager.update(deltaTime)
 
@@ -75,18 +75,16 @@ export class Warrior extends Entity{
             ));     
     }
     render(context){
-        this.weaponManager.render(context)
-
-        this.sprite.draw(
-            context, 
-            this.position.x -this.game.camera.x, 
-            this.position.y -this.game.camera.y, 
-            this.width, 
-            this.height,
-            this.flipX
-        )
-
-
+        if (this.sprite) {
+            this.sprite.draw(
+                context, 
+                this.position.x - this.game.camera.x, 
+                this.position.y - this.game.camera.y, 
+                this.width, 
+                this.height,
+                this.flipX
+            );
+        }        this.weaponManager.render(context)
     }
 
     checkExperience(){
@@ -113,6 +111,7 @@ export class Warrior extends Entity{
 
     takeDamage(damage){
         this.stats.currentHealth -= damage
+        
         if(this.stats.currentHealth <=0){
             this.die()
         }
@@ -121,13 +120,4 @@ export class Warrior extends Entity{
         this.game.gameOver = true
     }
 
-    //collision
-    isColliding(obj) {
-        return (
-            this.position.x < obj.position.x + obj.width &&
-            this.position.x + this.width > obj.position.x &&
-            this.position.y < obj.position.y + obj.height &&
-            this.position.y + this.height > obj.position.y
-        );
-    }
 }

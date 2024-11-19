@@ -18,11 +18,12 @@ export class UiManager {
         context.fillText(`level: ${this.player.stats.level}`, 10, 40);
         this.renderTimer(context)
         // health bar player ui
-        if(this.game.player.currentHealth !== this.game.player.maxHealth){
-            this.drawHealthBar(context);
+        // if(this.game.player.currentHealth !== this.game.player.maxHealth){
+        //     this.drawHealthBar(context);
 
-        } 
+        // } 
 
+        this.drawHealthBar(context)
         // experience bar player ui
         this.renderExperienceBar(context);
         // pause ui
@@ -155,7 +156,7 @@ export class UiManager {
         const x = this.player.position.x - this.game.camera.x;
         const y = this.player.position.y - barHeight - 5 - this.game.camera.y; // 5 px above player 
       
-        const healthPercentage = this.player.currentHealth / this.player.maxHealth; // calculate health percentage
+        const healthPercentage = this.player.stats.currentHealth / this.player.stats.maxHealth; // calculate health percentage
       
         context.fillStyle = 'gray';
         context.fillRect(x, y, barWidth, barHeight);

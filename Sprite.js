@@ -3,6 +3,7 @@ export class Sprite {
         this.animations = animations // collection of animations
         this.resourceManager = resourceManager
         this.currentAnimation = null
+        
     }
 
     setAnimation(name){

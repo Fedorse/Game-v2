@@ -1,81 +1,72 @@
-import { EnemyFactory } from "./enemy/EnemyFactory"
+import { EnemyFactory } from "./enemy/EnemyFactory.js"
+import {SPAWN_CONFIG} from './configs/spawnerConfig.js'
 export class Spawner {
     constructor(game) {
         this.game = game,
-        this.spawnInterval = 2,
-        this.spawnTimer = 0
-        this.lastDifficultyIncrease = 0
-        this.difficultyIncreaseInterval = 60
-        this.minSpawnInterval = 0.5
-
         this.enemyFactory = new EnemyFactory(this.game)
 
-        this.spawnSchedule = [
-            {time: 0, type: 'Piglet'},
-            {time: 10, type: 'Skeleton'},
-            {time: 20, type: 'Mushroom'},
-        ]
+        this.spawnInterval = SPAWN_CONFIG.waves[0].interval
+        this.spawnTimer = 0
+        this.lastDifficultyIncrease = 0
 
-        this.nextEnemyTypeIndex = 0
 
-        this.activeEnemyTypes = []; 
+        this.currentWaveIndex = 0
+        this.activeTypes = SPAWN_CONFIG.waves[0].types
     }
     update(deltaTime) {
-        this.spawnTimer += deltaTime
         const elapsedTime = this.game.elapsedTime
-
-        this.checkForNewEnemyTypes(elapsedTime);
+        this.spawnTimer += deltaTime
+        this.updateWave(elapsedTime);
 
         if(this.spawnTimer >= this.spawnInterval){
-            this.spawnEnemy()
+            this.spawn()
             this.spawnTimer = 0
         }
-
-        if(elapsedTime - this.lastDifficultyIncrease >= this.difficultyIncreaseInterval){
-            this.increaseDifficulty()
-            this.lastDifficultyIncrease = elapsedTime
+        if (elapsedTime - this.lastDifficultyIncrease >= SPAWN_CONFIG.difficultyIncreaseInterval) {
+            this.increaseDifficulty();
+            this.lastDifficultyIncrease = elapsedTime;
         }
     }
-    checkForNewEnemyTypes(elapsedTime) {
+    updateWave(elapsedTime) {
+        const waves = SPAWN_CONFIG.waves
         while (
-            this.nextEnemyTypeIndex < this.spawnSchedule.length &&
-            elapsedTime >= this.spawnSchedule[this.nextEnemyTypeIndex].time
+            this.currentWaveIndex < waves.length - 1 &&
+            elapsedTime >= waves[this.currentWaveIndex + 1].time
         ) {
-            const enemyTypeInfo = this.spawnSchedule[this.nextEnemyTypeIndex]; 
-            this.activateEnemyType(enemyTypeInfo.type);
-            this.nextEnemyTypeIndex++;
+            this.currentWaveIndex++;
+            this.activeTypes = waves[this.currentWaveIndex].types
+            this.spawnInterval = waves[this.currentWaveIndex].interval
+
         }
     }
-    
 
-    activateEnemyType(type) {
-        if (!this.activeEnemyTypes.includes(type)) {
-            this.activeEnemyTypes.push(type);
+    spawn() {
+        const position = this.getSpawnPosition();
+        const type = this.getRandomEnemyType();
+        console.log(position)
+
+        const enemy = this.enemyFactory.createEnemy(type, position);
+        if(enemy){
+            this.game.enemies.push(enemy);
         }
     }
-    
-    spawnEnemy() {
-        const spawnPosition = this.getSpawnPosition();
-        const enemyType = this.chooseEnemyType();
-        const enemy = this.enemyFactory.createEnemy(enemyType, spawnPosition);
-        this.game.enemies.push(enemy);
-    }
 
-    chooseEnemyType() {
-        const randomIndex = Math.floor(Math.random() * this.activeEnemyTypes.length);
-        return this.activeEnemyTypes[randomIndex];
+    getRandomEnemyType() {
+        const index = Math.floor(Math.random() * this.activeTypes.length);
+        return this.activeTypes[index];
     }
-    getSpawnPosition(){
-        const radius = Math.max(this.game.canvas.width, this.game.canvas.height) - 300
+    getSpawnPosition() {
+        const radius = Math.random() * (SPAWN_CONFIG.maxRadius - SPAWN_CONFIG.minRadius) + SPAWN_CONFIG.minRadius
         const angle = Math.random() * Math.PI * 2
-
-        const x = this.game.player.position.x + radius * Math.cos(angle)
-        const y = this.game.player.position.y + radius * Math.sin(angle)
-
-        return { x, y }
+    
+        const x = this.game.player.position.x + radius * Math.cos(angle);
+        const y = this.game.player.position.y + radius * Math.sin(angle);
+    
+        return { x, y };
     }
     // dicrease spawn interval
     increaseDifficulty(){
-        this.spawnInterval = Math.max(this.minSpawnInterval, this.spawnInterval - 0.1)
+        this.spawnInterval = Math.max(SPAWN_CONFIG.minSpawnInterval, this.spawnInterval - 0.1);
+
     }
 }

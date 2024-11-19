@@ -52,8 +52,7 @@ export class Hunter extends Entity {
     }
 
     update(deltaTime){
-        this.stateMachine.update(deltaTime)
-
+        super.update(deltaTime)
         this.weaponManager.update(deltaTime)
 
         this.constrainToMap()
@@ -75,17 +74,7 @@ export class Hunter extends Entity {
     }
     render(context){
         this.weaponManager.render(context)
-
-        this.sprite.draw(
-            context, 
-            this.position.x -this.game.camera.x, 
-            this.position.y -this.game.camera.y, 
-            this.width, 
-            this.height,
-            this.flipX
-        )
-
-
+        super.render(context)
     }
 
     checkExperience(){
@@ -118,15 +107,5 @@ export class Hunter extends Entity {
     }
     die(){
         this.game.gameOver = true
-    }
-
-    //collision
-    isColliding(obj) {
-        return (
-            this.position.x < obj.position.x + obj.width &&
-            this.position.x + this.width > obj.position.x &&
-            this.position.y < obj.position.y + obj.height &&
-            this.position.y + this.height > obj.position.y
-        );
     }
 }

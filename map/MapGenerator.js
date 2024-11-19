@@ -44,7 +44,7 @@ export class MapGenerator {
     }
 
     const chestSprite = this.game.resourceManager.getImage('chest')
-    const numberOfChests = 30;
+    const numberOfChests = 300;
     for(let i = 0; i < numberOfChests; i++) {
       const position = this.getRandomPosition();
       const chest = new MapChest(this.game, position.x, position.y, chestSprite);
@@ -122,6 +122,47 @@ export class MapGenerator {
             this.tileHeight
           );
         }
+      }
+    }
+  }
+  checkCollisions() {
+    this.mapObjects.forEach(object => {
+      if (object.isSolid && this.checkCollision(this.game.player, object)) {
+        this.resolveCollision(this.game.player, object);
+      }
+    });
+  }
+ 
+ 
+  checkCollision(obj1, obj2) {
+    return (
+      obj1.position.x < obj2.position.x + obj2.width &&
+      obj1.position.x + obj1.width > obj2.position.x &&
+      obj1.position.y < obj2.position.y + obj2.height &&
+      obj1.position.y + obj1.height > obj2.position.y
+    );
+  }
+ 
+  resolveCollision(player, object) {
+    const dx = (player.position.x + player.width / 2) - (object.position.x + object.width / 2);
+    const dy = (player.position.y + player.height / 2) - (object.position.y + object.height / 2);
+ 
+    const width = (player.width + object.width) / 2;
+    const height = (player.height + object.height) / 2;
+    const crossWidth = width * dy;
+    const crossHeight = height * dx;
+ 
+    if (Math.abs(crossWidth) > Math.abs(crossHeight)) {
+      if (crossWidth > 0) {
+        player.position.y = object.position.y + object.height;
+      } else {
+        player.position.y = object.position.y - player.height;
+      }
+    } else {
+      if (crossHeight > 0) {
+        player.position.x = object.position.x + object.width;
+      } else {
+        player.position.x = object.position.x - player.width;
       }
     }
   }

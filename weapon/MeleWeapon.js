@@ -100,10 +100,8 @@ export class MeleeWeapon extends BaseWeapon {
         })
     }
     checkChestHit() {
-        console.log('Проверка на попадание по сундуку');
         this.game.mapObjects.forEach(object => {
             if (object instanceof MapChest && this.calculateDistance(this.position, object.position) < object.width / 2) {
-                console.log('Попадание по сундуку');
                 object.takeDamage(this.damage);
             }
         });

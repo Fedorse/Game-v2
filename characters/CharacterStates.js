@@ -58,7 +58,6 @@ export class WalkState extends State {
         character.position.x += character.velocity.x * character.stats.speed * deltaTime;
         character.position.y += character.velocity.y * character.stats.speed * deltaTime;
 
-        // Возвращаемся в idle если нет движения
         if (!input.left && !input.right && !input.up && !input.down) {
             character.stateMachine.setState('idle');
         }

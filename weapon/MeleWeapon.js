@@ -38,7 +38,6 @@ export class MeleeWeapon extends BaseWeapon {
         this.isAttacking = false;
       }
       this.checkEnemyHit();
-      this.checkChestHit();
     } else if (this.isReturning) {
       //back weapon to player
       const directionBack = {
@@ -102,15 +101,13 @@ export class MeleeWeapon extends BaseWeapon {
         }
       }
     });
-  }
-  checkChestHit() {
-    this.game.mapObjects.forEach((object) => {
-      if (
-        object.isDestructible &&
-        this.calculateDistance(this.position, object.position) <
-          object.width / 2
-      ) {
-        object.takeDamage(this.damage);
+    // Проверка разрушаемых объектов на карте
+    this.game.mapGenerator.mapObjects.forEach((object) => {
+      if (object.isDestructible) {
+        const distance = this.calculateDistance(this.position, object.position);
+        if (distance < object.width / 2) {
+          object.takeDamage(this.damage);
+        }
       }
     });
   }

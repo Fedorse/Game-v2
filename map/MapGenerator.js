@@ -1,4 +1,5 @@
 import { MapObjFactory } from './MapObjFactory';
+
 export class MapGenerator {
   constructor(game) {
     this.game = game;
@@ -7,17 +8,14 @@ export class MapGenerator {
     this.mapFactory = new MapObjFactory(game);
     this.tileSetImage = this.game.resourceManager.getImage('atlas');
 
-    this.tileMapping = {
-      ground: { row: 4, col: 2 },
-      path: { row: 1, col: 1 },
-    };
+    this.groundTile = { row: 4, col: 2 };
 
     this.mapWidthInTiles = 1000;
     this.mapHeightInTiles = 1000;
 
     this.mapData = [];
     this.mapObjects = [];
-    console.log(this.mapObjects);
+
     this.generateMapData();
     this.initializeMapObjects();
   }
@@ -41,36 +39,23 @@ export class MapGenerator {
     for (let i = 0; i < numberOfChests; i++) {
       const position = this.getRandomPosition();
       const chest = this.mapFactory.createObj('CHEST', position.x, position.y);
-      this.game.enemies.push(chest);
+      this.mapObjects.push(chest);
     }
   }
 
   getRandomPosition() {
-    const maxTileY = this.mapHeightInTiles;
-    const maxTileX = this.mapWidthInTiles;
+    const tileX = Math.floor(Math.random() * this.mapWidthInTiles);
+    const tileY = Math.floor(Math.random() * this.mapHeightInTiles);
 
-    const tileX = Math.floor(Math.random() * maxTileX);
-    const tileY = Math.floor(Math.random() * maxTileY);
-
-    const x = tileX * this.tileWidth;
-    const y = tileY * this.tileHeight;
-
-    return { x, y };
+    return {
+      x: tileX * this.tileWidth,
+      y: tileY * this.tileHeight,
+    };
   }
 
   generateMapData() {
     for (let row = 0; row < this.mapHeightInTiles; row++) {
-      const rowData = [];
-      for (let col = 0; col < this.mapWidthInTiles; col++) {
-        let tileIndex;
-        if (col === Math.floor(this.mapWidthInTiles / 2)) {
-          tileIndex = this.tileMapping.path;
-        } else {
-          tileIndex = this.tileMapping.ground;
-        }
-
-        rowData.push(tileIndex);
-      }
+      const rowData = new Array(this.mapWidthInTiles).fill(this.groundTile);
       this.mapData.push(rowData);
     }
   }
@@ -102,35 +87,46 @@ export class MapGenerator {
 
     for (let row = startRow; row < endRow; row++) {
       for (let col = startCol; col < endCol; col++) {
-        if (
-          row >= 0 &&
-          row < this.mapHeightInTiles &&
-          col >= 0 &&
-          col < this.mapWidthInTiles
-        ) {
-          const tileIndex = this.mapData[row][col];
-          this.drawTile(
-            tileIndex,
-            col * this.tileWidth,
-            row * this.tileHeight,
-            context,
-            camera
-          );
-        } else {
-          context.fillStyle = 'black';
-          context.fillRect(
-            col * this.tileWidth - camera.x,
-            row * this.tileHeight - camera.y,
-            this.tileWidth,
-            this.tileHeight
-          );
-        }
+        this.drawTile(
+          this.groundTile,
+          col * this.tileWidth,
+          row * this.tileHeight,
+          context,
+          camera
+        );
       }
     }
   }
+
+  isInBounds(row, col) {
+    return (
+      row >= 0 &&
+      row < this.mapHeightInTiles &&
+      col >= 0 &&
+      col < this.mapWidthInTiles
+    );
+  }
+
   checkCollisions() {
-    this.mapObjects.forEach((object) => {
-      object.update();
-    });
+    this.mapObjects.forEach((object) => object.update());
+  }
+
+  constrainPosition(entity) {
+    return {
+      x: Math.max(
+        0 + entity.width / 2,
+        Math.min(
+          entity.position.x,
+          this.mapWidthInTiles * this.tileWidth - entity.width
+        )
+      ),
+      y: Math.max(
+        0 + entity.height / 2,
+        Math.min(
+          entity.position.y,
+          this.mapHeightInTiles * this.tileHeight - entity.height
+        )
+      ),
+    };
   }
 }

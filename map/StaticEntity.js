@@ -1,3 +1,4 @@
+import { ExperienceOrb } from '../ExperienceOrb.js';
 export class StaticEntity {
   constructor(game, x, y, config) {
     this.game = game;
@@ -34,6 +35,7 @@ export class StaticEntity {
   takeDamage(damage) {
     if (this.isDestructible && this.health > 0) {
       this.health -= damage;
+      console.log(`Object took damage: ${damage}, health: ${this.health}`); // Для отладки
       if (this.health <= 0) {
         this.destroy();
       }
@@ -42,10 +44,10 @@ export class StaticEntity {
   destroy() {
     this.toRemove = true;
     if (this.config.loot) {
-      this.droopLoot();
+      this.dropLoot();
     }
   }
-  droopLoot() {
+  dropLoot() {
     if (this.config.loot.experience) {
       const orb = new ExperienceOrb(
         this.game,

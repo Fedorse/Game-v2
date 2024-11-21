@@ -24,7 +24,7 @@ export const MAP_CONFIG = {
     isDestructible: true,
     health: 10,
     loot: {
-      experiense: 20,
+      experience: 20,
     },
   },
 };

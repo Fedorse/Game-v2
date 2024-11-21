@@ -1,123 +1,117 @@
-import { Entity } from "../core/Entity.js";
-import {Sprite} from '../Sprite.js'
+import { Entity } from '../core/Entity.js';
+import { Sprite } from '../Sprite.js';
 import { Animation } from '../Animation.js';
-import { playerIdleFrames, playerWalkFrames } from '../animations/playerAnim.js';
+import {
+  playerIdleFrames,
+  playerWalkFrames,
+} from '../animations/playerAnim.js';
 import { WeaponManager } from '../weapon/WeaponManager.js';
 import { SwordWeapon } from '../weapon/SwordWeapon.js';
 
-import { StateMachine } from "../core/StateMachine.js";
-import { IdleState, WalkState } from "./CharacterStates.js";
+import { StateMachine } from '../core/StateMachine.js';
+import { IdleState, WalkState } from './CharacterStates.js';
 
-export class Warrior extends Entity{
-    constructor(game){
-        super(game)
-        this.width = 64
-        this.height = 64
+export class Warrior extends Entity {
+  constructor(game) {
+    super(game);
+    this.width = 64;
+    this.height = 64;
 
-        this.stats = {
-            maxHealth: 1000,
-            currentHealth: 1000,
-            speed: 100,
-            defence: 10,
-            level: 1,
-            experience: 0,
-            nextLevelExperience: 30
-        }
+    this.stats = {
+      maxHealth: 1000,
+      currentHealth: 1000,
+      speed: 300,
+      defence: 10,
+      level: 1,
+      experience: 0,
+      nextLevelExperience: 30,
+    };
 
-        // animations 
-        const idleAnim = new Animation(playerIdleFrames, 200,'playerIdle')
-        const walkAnim = new Animation(playerWalkFrames, 200,'playerWalk')
-        this.sprite = new Sprite({
-                idle: idleAnim,
-                walk: walkAnim
-            }, this.game.resourceManager);
-    
-        // weapons
-        this.weaponManager = new WeaponManager(this.game, this)
-        this.initWeapons()
+    // animations
+    const idleAnim = new Animation(playerIdleFrames, 200, 'playerIdle');
+    const walkAnim = new Animation(playerWalkFrames, 200, 'playerWalk');
+    this.sprite = new Sprite(
+      {
+        idle: idleAnim,
+        walk: walkAnim,
+      },
+      this.game.resourceManager
+    );
 
-        // state
-        this.initialStateMachine()
+    // weapons
+    this.weaponManager = new WeaponManager(this.game, this);
+    this.initWeapons();
+
+    // state
+    this.initialStateMachine();
+  }
+  initialStateMachine() {
+    this.stateMachine = new StateMachine();
+
+    this.stateMachine.addState('idle', new IdleState(this));
+    this.stateMachine.addState('walk', new WalkState(this));
+    this.stateMachine.setState('idle');
+  }
+
+  initWeapons() {
+    this.weaponManager.addWeapon(SwordWeapon);
+  }
+
+  update(deltaTime) {
+    this.stateMachine.update(deltaTime);
+    this.weaponManager.update(deltaTime);
+
+    //colisson border map
+    const constrainedPosition = this.game.mapGenerator.constrainPosition(this);
+    this.position.x = constrainedPosition.x;
+    this.position.y = constrainedPosition.y;
+
+    this.checkExperience();
+  }
+
+  render(context) {
+    if (this.sprite) {
+      this.sprite.draw(
+        context,
+        this.position.x - this.game.camera.x,
+        this.position.y - this.game.camera.y,
+        this.width,
+        this.height,
+        this.flipX
+      );
     }
-    initialStateMachine(){
-        this.stateMachine = new StateMachine()
+    this.weaponManager.render(context);
+  }
 
-        this.stateMachine.addState('idle', new IdleState(this))
-        this.stateMachine.addState('walk', new WalkState(this))
-        this.stateMachine.setState('idle')
+  checkExperience() {
+    this.game.experienceOrbs.forEach((orb, index) => {
+      if (this.isColliding(orb)) {
+        this.game.experienceOrbs.splice(index, 1);
+        this.stats.experience += orb.value;
+      }
+      if (this.stats.experience >= this.stats.nextLevelUp) {
+        this.levelUp();
+      }
+    });
+  }
+
+  levelUp() {
+    this.stats.level++;
+    this.stats.experience = 0;
+    this.stats.nextLevelExperience += 100;
+    this.stats.defence += 10;
+    this.weaponManager.gainExperience(100);
+    // this.game.ui.showUpgradeAugments()
+  }
+
+  takeDamage(damage) {
+    this.stats.currentHealth -= damage;
+
+    if (this.stats.currentHealth <= 0) {
+      this.die();
     }
-
-    initWeapons(){
-        this.weaponManager.addWeapon(SwordWeapon)
-
-    }
-
-    update(deltaTime){
-        this.stateMachine.update(deltaTime);
-
-        this.weaponManager.update(deltaTime)
-
-        this.constrainToMap()
-        this.checkExperience()
-    }
-
-    constrainToMap(){
-       //collision border map
-        this.position.x = Math.max(0 + this.width / 2, Math.min(
-        this.position.x,
-        this.game.mapGenerator.mapWidthInTiles * this.game.mapGenerator.tileWidth - this.width 
-            ));
-            
-        // Ограничение по Y
-        this.position.y = Math.max(0 + this.height / 2, Math.min(
-        this.position.y,
-        this.game.mapGenerator.mapHeightInTiles * this.game.mapGenerator.tileHeight - this.height 
-            ));     
-    }
-    render(context){
-        if (this.sprite) {
-            this.sprite.draw(
-                context, 
-                this.position.x - this.game.camera.x, 
-                this.position.y - this.game.camera.y, 
-                this.width, 
-                this.height,
-                this.flipX
-            );
-        }        this.weaponManager.render(context)
-    }
-
-    checkExperience(){
-        this.game.experienceOrbs.forEach((orb, index)=> {
-            if(this.isColliding(orb)){
-                this.game.experienceOrbs.splice(index, 1)
-                this.stats.experience += orb.value
-
-            }
-            if(this.stats.experience >= this.stats.nextLevelUp){
-                this.levelUp()
-            }
-        })
-    }
-
-    levelUp(){
-        this.stats.level++;
-        this.stats.experience = 0;
-        this.stats.nextLevelExperience += 100;
-        this.stats.defence += 10;
-        this.weaponManager.gainExperience(100);
-        // this.game.ui.showUpgradeAugments()
-    }
-
-    takeDamage(damage){
-        this.stats.currentHealth -= damage
-        
-        if(this.stats.currentHealth <=0){
-            this.die()
-        }
-    }
-    die(){
-        this.game.gameOver = true
-    }
-
+  }
+  die() {
+    this.game.gameOver = true;
+  }
 }

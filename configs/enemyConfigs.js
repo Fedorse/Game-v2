@@ -4,7 +4,13 @@ import { pigletWalkAnim } from '../animations/pigletWalkAnim';
 export const ENEMY_CONFIGS = {
   SKELETON: {
     name: 'skeleton',
-    stats: {},
+    width: 64,
+    height: 64,
+    stats: {
+      health: 20,
+      speed: 80,
+      damage: 10,
+    },
     animation: {
       frames: skeletonWalkAnim,
       spriteName: 'skeleton',
@@ -13,7 +19,13 @@ export const ENEMY_CONFIGS = {
   },
   PIGLET: {
     name: 'piglet',
-    stats: {},
+    width: 64,
+    height: 64,
+    stats: {
+      health: 50,
+      speed: 100,
+      damage: 20,
+    },
     animation: {
       frames: pigletWalkAnim,
       spriteName: 'piglet',
@@ -22,7 +34,13 @@ export const ENEMY_CONFIGS = {
   },
   MUSHROOM: {
     name: 'mushroom',
-    stats: {},
+    width: 64,
+    height: 64,
+    stats: {
+      health: 100,
+      speed: 150,
+      damage: 30,
+    },
     animation: {
       frames: mushroomWalkAnim,
       spriteName: 'mushroom',

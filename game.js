@@ -6,6 +6,7 @@ import { MapGenerator } from './map/MapGenerator.js';
 import { UiManager } from './ui/UiManager.js';
 import { Warrior } from './characters/Warrior.js';
 import { Hunter } from './characters/Hunter.js';
+import { DamageText } from './ui/DamageText.js';
 
 export class Game {
   constructor(canvas, context, resourceManager) {
@@ -31,6 +32,7 @@ export class Game {
     this.mapObjects = this.mapGenerator.mapObjects;
     this.experienceOrbs = [];
     this.projectiles = [];
+    this.damageTexts = [];
     this.lastTime = 0;
     this.deltaTime = 0;
     this.gameOver = false;
@@ -63,8 +65,12 @@ export class Game {
       document.location.reload();
     }
   }
+  addDamageText(position, damage) {
+    this.damageTexts.push(new DamageText(position, damage));
+  }
 
   update(deltaTime) {
+    console.log(this.damageTexts);
     this.enemies.forEach((enemy) => {
       enemy.update(deltaTime);
     });
@@ -83,13 +89,14 @@ export class Game {
       }
     });
     this.mapObjects.forEach((object) => object.update(deltaTime));
-
     this.enemies = this.enemies.filter((enemy) => !enemy.toRemove);
     this.mapObjects = this.mapObjects.filter((object) => !object.toRemove);
     this.mapGenerator.checkCollisions();
     this.player.update(deltaTime);
     this.camera.follow(this.player);
     this.spawner.update(deltaTime);
+    this.damageTexts.forEach((text) => text.update(deltaTime));
+    this.damageTexts = this.damageTexts.filter((text) => !text.isFinished());
     this.ui.update(this.player);
   }
 
@@ -101,6 +108,7 @@ export class Game {
     this.enemies.forEach((enemy) => enemy.render(this.context));
     this.experienceOrbs.forEach((orb) => orb.render(this.context));
     this.projectiles.forEach((projectil) => projectil.render(this.context));
+    this.damageTexts.forEach((text) => text.render(this.context, this.camera));
     this.ui.render(this.context);
   }
 }

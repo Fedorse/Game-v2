@@ -62,12 +62,27 @@ export class Hunter extends Entity {
     this.position.x = constrainedPosition.x;
     this.position.y = constrainedPosition.y;
 
+    if (this.isHit) {
+      this.hitTimer += deltaTime;
+      if (this.hitTimer >= this.hitDuration) {
+        this.isHit = false;
+        this.hitTimer = 0;
+      }
+    }
+
     this.checkExperience();
   }
 
   render(context) {
     this.weaponManager.render(context);
+    if (this.isHit) {
+      context.save();
+      context.globalAlpha = 0.1;
+    }
     super.render(context);
+    if (this.isHit) {
+      context.restore();
+    }
   }
 
   checkExperience() {

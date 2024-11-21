@@ -7,7 +7,7 @@ export class MeleeWeapon extends BaseWeapon {
     // parametrs attack
     this.attackRange = 80;
     this.attackCooldown = 0.8;
-    this.damage = 10;
+    this.damage = 1;
 
     //state atack
     this.isReturning = false;

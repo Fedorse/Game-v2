@@ -54,7 +54,7 @@ export class Warrior extends Entity {
   }
 
   initWeapons() {
-    this.weaponManager.addWeapon(SwordWeapon);
+    // this.weaponManager.addWeapon(SwordWeapon);
   }
 
   update(deltaTime) {
@@ -67,18 +67,24 @@ export class Warrior extends Entity {
     this.position.y = constrainedPosition.y;
 
     this.checkExperience();
+    if (this.isHit) {
+      this.hitTimer += deltaTime;
+      if (this.hitTimer >= this.hitDuration) {
+        this.isHit = false;
+        this.hitTimer = 0;
+      }
+    }
   }
 
   render(context) {
-    if (this.sprite) {
-      this.sprite.draw(
-        context,
-        this.position.x - this.game.camera.x,
-        this.position.y - this.game.camera.y,
-        this.width,
-        this.height,
-        this.flipX
-      );
+    if (this.isHit) {
+      context.save();
+      context.globalCompositeOperation = 'multiply';
+      context.fillStyle = 'rgba(255, 0, 0, 0.9)';
+    }
+    super.render(context);
+    if (this.isHit) {
+      context.restore();
     }
     this.weaponManager.render(context);
   }
@@ -106,7 +112,7 @@ export class Warrior extends Entity {
 
   takeDamage(damage) {
     this.stats.currentHealth -= damage;
-
+    this.isHit = true;
     if (this.stats.currentHealth <= 0) {
       this.die();
     }

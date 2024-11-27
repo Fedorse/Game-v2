@@ -9,6 +9,10 @@ export class UiManager {
 
   update() {}
 
+  setPlayer(player) {
+  this.player = player;
+  }
+
   render(context) {
     // debug info ui
     context.fillStyle = 'white';

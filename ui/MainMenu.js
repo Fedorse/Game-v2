@@ -3,14 +3,13 @@ export class MainMenu {
   constructor(game) {
     this.game = game;
     this.bg = this.game.resourceManager.getImage('menu');
-
-    this.buttons = [];
-
-    // start game button
-    const startButton = new UIButton(
+    this.buttons = this.createButtons();
+  }
+  createButton(y, text, onClick) {
+    return new UIButton(
       this.game,
       this.game.canvas.width / 2 - 100,
-      this.game.canvas.height / 2 - 75,
+      y,
       200,
       50,
       {
@@ -18,46 +17,25 @@ export class MainMenu {
         hover: this.game.resourceManager.getImage('btnHover'),
         pressed: this.game.resourceManager.getImage('btnPressed'),
       },
-      'Start game',
-      () => {
+      text,
+      onClick
+    );
+  }
+  createButtons() {
+    const baseY = this.game.canvas.height / 2 - 75;
+    const spacing = 75;
+
+    return [
+      this.createButton(baseY, 'Start game', () => {
         this.game.startGame();
-      }
-    );
-    // settings button
-    const settngsButton = new UIButton(
-      this.game,
-      this.game.canvas.width / 2 - 100,
-      this.game.canvas.height / 2,
-      200,
-      50,
-      {
-        normal: this.game.resourceManager.getImage('btnNormal'),
-        hover: this.game.resourceManager.getImage('btnHover'),
-        pressed: this.game.resourceManager.getImage('btnPressed'),
-      },
-      'Settings',
-      () => {
+      }),
+      this.createButton(baseY + spacing, 'Settings', () => {
         console.log('open settings');
-      }
-    );
-    // exit button
-    const exitButton = new UIButton(
-      this.game,
-      this.game.canvas.width / 2 - 100,
-      this.game.canvas.height / 2 + 75,
-      200,
-      50,
-      {
-        normal: this.game.resourceManager.getImage('btnNormal'),
-        hover: this.game.resourceManager.getImage('btnHover'),
-        pressed: this.game.resourceManager.getImage('btnPressed'),
-      },
-      'Exit',
-      () => {
+      }),
+      this.createButton(baseY + spacing * 2, 'Exit', () => {
         console.log('exit');
-      }
-    );
-    this.buttons.push(startButton, settngsButton, exitButton);
+      }),
+    ];
   }
   render(context) {
     context.drawImage(
@@ -67,13 +45,9 @@ export class MainMenu {
       this.game.canvas.width,
       this.game.canvas.height
     );
-    this.buttons.forEach((button) => {
-      button.render(context);
-    });
+    this.buttons.forEach((button) => button.render(context));
   }
   removeEvents() {
-    this.buttons.forEach((button) => {
-      button.removeMouseEvents();
-    });
+    this.buttons.forEach((button) => button.removeMouseEvents());
   }
 }

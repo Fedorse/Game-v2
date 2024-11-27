@@ -54,7 +54,7 @@ export class Warrior extends Entity {
   }
 
   initWeapons() {
-    // this.weaponManager.addWeapon(SwordWeapon);
+    this.weaponManager.addWeapon(SwordWeapon);
   }
 
   update(deltaTime) {
@@ -95,7 +95,7 @@ export class Warrior extends Entity {
         this.game.experienceOrbs.splice(index, 1);
         this.stats.experience += orb.value;
       }
-      if (this.stats.experience >= this.stats.nextLevelUp) {
+      if (this.stats.experience >= this.stats.nextLevelExperience) {
         this.levelUp();
       }
     });
@@ -107,7 +107,6 @@ export class Warrior extends Entity {
     this.stats.nextLevelExperience += 100;
     this.stats.defence += 10;
     this.weaponManager.gainExperience(100);
-    // this.game.ui.showUpgradeAugments()
   }
 
   takeDamage(damage) {

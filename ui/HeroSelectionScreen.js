@@ -3,21 +3,47 @@ import { HeroIcon } from './HeroIcon';
 import { HEROES } from '../configs/Heroes';
 
 export class HeroSelectionScreen {
+  // Константы для разметки
+  static LAYOUT = {
+    HEROES: {
+      ICON_SIZE: 100,
+      SPACING: 50,
+      BOTTOM_MARGIN: 50,
+    },
+    INFO: {
+      WIDTH: 600,
+      HEIGHT: 400,
+      TOP_MARGIN: 10,
+      PADDING: 20,
+      LINE_HEIGHT: 30,
+    },
+    RUN_BUTTON: {
+      WIDTH: 150,
+      HEIGHT: 50,
+      RIGHT_MARGIN: 50,
+      TOP_MARGIN: 50,
+    },
+  };
+
   constructor(game) {
     this.game = game;
     this.bg = this.game.resourceManager.getImage('heroBg');
+    this.infoBg = this.game.resourceManager.getImage('bgStats');
     this.heroes = HEROES;
     this.selectedHero = this.heroes[0];
 
     this.heroIcons = [];
     this.createHeroIcons();
+    this.textBlocks = [];
 
     this.runButton = new UIButton(
       this.game,
-      this.game.canvas.width / 2 - 75,
-      this.game.canvas.height - 100,
-      150,
-      50,
+      this.game.canvas.width -
+        HeroSelectionScreen.LAYOUT.RUN_BUTTON.WIDTH -
+        HeroSelectionScreen.LAYOUT.RUN_BUTTON.RIGHT_MARGIN,
+      HeroSelectionScreen.LAYOUT.RUN_BUTTON.TOP_MARGIN,
+      HeroSelectionScreen.LAYOUT.RUN_BUTTON.WIDTH,
+      HeroSelectionScreen.LAYOUT.RUN_BUTTON.HEIGHT,
       {
         normal: this.game.resourceManager.getImage('btnNormal'),
         hover: this.game.resourceManager.getImage('btnHover'),
@@ -30,26 +56,39 @@ export class HeroSelectionScreen {
         }
       }
     );
-    this.runButton.isEnabled = false;
+    this.runButton.isEnabled = true;
+
+    this.renderHeroInfo(this.selectedHero);
+  }
+  selectHero(heroType) {
+    this.removeEvents();
+    this.game.setPlayerHero(heroType);
+    this.game.state = 'playing';
+  }
+  removeEvents() {
+    this.heroIcons.forEach((icon) => {
+      icon.removeEvents();
+    });
+    this.runButton.removeMouseEvents();
   }
 
   createHeroIcons() {
-    const iconSize = 100;
-    const spacing = 50;
+    const layout = HeroSelectionScreen.LAYOUT.HEROES;
     const totalWidth =
-      this.heroes.length * iconSize + (this.heroes.length - 1) * spacing;
-    let startX = (this.game.canvas.width - totalWidth) / 2;
+      this.heroes.length * layout.ICON_SIZE +
+      (this.heroes.length - 1) * layout.SPACING;
+    const startX = (this.game.canvas.width - totalWidth) / 2;
+    const y = this.game.canvas.height - layout.ICON_SIZE - layout.BOTTOM_MARGIN;
 
     this.heroes.forEach((hero, index) => {
-      const x = startX + index * (iconSize + spacing);
-      const y = this.game.canvas.height / 2 - iconSize / 2;
+      const x = startX + index * (layout.ICON_SIZE + layout.SPACING);
 
       const icon = new HeroIcon(
         this.game,
         x,
         y,
-        iconSize,
-        iconSize,
+        layout.ICON_SIZE,
+        layout.ICON_SIZE,
         hero,
         this
       );
@@ -58,19 +97,53 @@ export class HeroSelectionScreen {
     });
   }
 
-  selectHero(heroType) {
-    this.removeEvents();
-
-    this.game.setPlayerHero(heroType);
-
-    this.game.state = 'playing';
+  renderHeroInfo(hero) {
+    this.textBlocks = [
+      {
+        text: hero.name,
+        x: this.game.canvas.width / 2,
+        y: 140,
+        font: 'bold 32px Arial',
+        align: 'center',
+      },
+      {
+        text: hero.description,
+        x: this.game.canvas.width / 2,
+        y: 180,
+        font: '20px Arial',
+        align: 'center',
+      },
+      {
+        text: `Health: ${hero.characteristics.health}`,
+        x: this.game.canvas.width / 2,
+        y: 220,
+        font: '20px Arial',
+        align: 'center',
+      },
+      {
+        text: `Attack: ${hero.characteristics.attack}`,
+        x: this.game.canvas.width / 2,
+        y: 250,
+        font: '20px Arial',
+        align: 'center',
+      },
+      {
+        text: `Defense: ${hero.characteristics.defense}`,
+        x: this.game.canvas.width / 2,
+        y: 280,
+        font: '20px Arial',
+        align: 'center',
+      },
+    ];
   }
 
-  removeEvents() {
-    this.heroIcons.forEach((icon) => {
-      icon.removeEvents();
+  renderText(context) {
+    this.textBlocks.forEach((block) => {
+      context.font = block.font;
+      context.textAlign = block.align;
+      context.fillStyle = 'black';
+      context.fillText(block.text, block.x, block.y);
     });
-    this.runButton.removeMouseEvents();
   }
 
   render(context) {
@@ -82,61 +155,23 @@ export class HeroSelectionScreen {
         this.game.canvas.width,
         this.game.canvas.height
       );
-    } else {
-      // Если фон отсутствует, заливаем цветом
-      context.fillStyle = 'black';
-      context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
     }
 
+    if (this.infoBg) {
+      const layout = HeroSelectionScreen.LAYOUT.INFO;
+      const infoX = (this.game.canvas.width - layout.WIDTH) / 2;
+      const infoY = layout.TOP_MARGIN;
+      context.drawImage(this.infoBg, infoX, infoY, layout.WIDTH, layout.HEIGHT);
+    }
+
+    // Рисуем текст
+    this.renderText(context);
+
+    // Рендер кнопок и иконок
     this.heroIcons.forEach((icon) => {
       icon.render(context);
     });
 
-    // Отрисовка описания выбранного героя
-    if (this.selectedHero) {
-      this.renderHeroInfo(context, this.selectedHero);
-      // Активируем кнопку "Run"
-      this.runButton.isEnabled = true;
-    } else {
-      // Кнопка "Run" не активна
-      this.runButton.isEnabled = false;
-    }
-
-    // Отрисовка кнопки "Run"
     this.runButton.render(context);
-  }
-
-  renderHeroInfo(context, hero) {
-    const infoX = 50;
-    const infoY = 50;
-    const lineHeight = 25;
-
-    context.fillStyle = 'white';
-    context.font = '20px Arial';
-    context.textAlign = 'left';
-
-    context.fillText(`Name: ${hero.name}`, infoX, infoY);
-    context.fillText(
-      `Description: ${hero.description}`,
-      infoX,
-      infoY + lineHeight
-    );
-
-    const characteristics = hero.characteristics;
-    context.fillText(
-      `Health: ${characteristics.health}`,
-      infoX,
-      infoY + 2 * lineHeight
-    );
-    context.fillText(
-      `Attack: ${characteristics.attack}`,
-      infoX,
-      infoY + 3 * lineHeight
-    );
-    context.fillText(
-      `Defense: ${characteristics.defense}`,
-      infoX,
-      infoY + 4 * lineHeight
-    );
   }
 }

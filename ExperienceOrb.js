@@ -8,7 +8,7 @@ export class ExperienceOrb extends Entity {
     super(game), (this.position = { ...position });
     this.width = 32;
     this.height = 32;
-    this.value = 20;
+    this.value = 10;
     this.speed = 80;
 
     //animation

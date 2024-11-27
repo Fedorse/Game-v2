@@ -3,18 +3,15 @@ export class UiManager {
   constructor(game, player) {
     this.game = game;
     this.player = player;
-    this.upgradeAugmentsVisible = false;
-    this.augmentOptions = [];
   }
 
   update() {}
 
   setPlayer(player) {
-  this.player = player;
+    this.player = player;
   }
 
   render(context) {
-    // debug info ui
     context.fillStyle = 'white';
     context.font = '20px Arial';
     context.fillText(`level: ${this.player.stats.level}`, 10, 40);
@@ -58,7 +55,7 @@ export class UiManager {
 
   renderExperienceBar(context) {
     const currentExperience = this.player.stats.experience;
-    const nextLevelExp = this.player.stats.nextLevelUp;
+    const nextLevelExp = this.player.stats.nextLevelExperience;
     const barWidth = this.game.canvas.width - 20;
     const barHeight = 10;
 

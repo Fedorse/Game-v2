@@ -32,6 +32,7 @@ export class HeroIcon {
   handleMouseDown(event) {
     if (this.isHovered) {
       this.selectionScreen.selectedHero = this.heroData;
+      this.selectionScreen.renderHeroInfo(this.heroData);
     }
   }
   isInside(x, y) {
@@ -64,13 +65,16 @@ export class HeroIcon {
 
     if (this.isHovered || this.selectionScreen.selectedHero === this.heroData) {
       context.strokeStyle = 'yellow';
-      context.lineWidth = 3;
-      context.strokeRect(
-        this.position.x,
-        this.position.y,
-        this.width,
-        this.height
+      context.lineWidth = 5;
+      context.beginPath();
+      context.arc(
+        this.position.x + this.width / 2, // Центр X
+        this.position.y + this.height / 2, // Центр Y
+        this.width / 2 + 5,
+        0,
+        Math.PI * 2
       );
+      context.stroke();
     }
   }
 }

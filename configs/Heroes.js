@@ -21,4 +21,26 @@ export const HEROES = [
       defense: 10,
     },
   },
+  {
+    type: 'mage',
+    name: 'Mage',
+    icon: 'warriorIcon',
+    description: 'A powerful spellcaster magic attacks.',
+    characteristics: {
+      health: 60,
+      attack: 35,
+      defense: 5,
+    },
+  },
+  {
+    type: 'rogue',
+    name: 'Rogue',
+    icon: 'hunterIcon',
+    description: 'A swift assassin specializing in critical strikes.',
+    characteristics: {
+      health: 70,
+      attack: 30,
+      defense: 8,
+    },
+  },
 ];

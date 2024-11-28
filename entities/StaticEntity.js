@@ -1,4 +1,4 @@
-import { ExperienceOrb } from '../ExperienceOrb.js';
+import { ExperienceOrb } from './ExperienceOrb.js';
 export class StaticEntity {
   constructor(game, x, y, config) {
     this.game = game;

@@ -1,15 +1,15 @@
 // import { Player } from './Player.js'
-import { InputHandler } from './utils/InputHandler.js';
+import { InputHandler } from '../utils/InputHandler.js';
 import { Spawner } from './Spawner.js';
 import { Camera } from './Camera.js';
-import { MapGenerator } from './map/MapGenerator.js';
-import { UiManager } from './ui/UiManager.js';
-import { Warrior } from './characters/Warrior.js';
-import { Hunter } from './characters/Hunter.js';
-import { DamageText } from './ui/DamageText.js';
-import { MainMenu } from './ui/MainMenu.js';
-import { HeroSelectionScreen } from './ui/HeroSelectionScreen.js';
-import { LevelUpScreen } from './ui/LevelUpScreen.js';
+import { MapGenerator } from '../entities/map/MapGenerator.js';
+import { UiManager } from '../managers/UiManager.js';
+import { Warrior } from '../entities/characters/Warrior.js';
+import { Hunter } from '../entities/characters/Hunter.js';
+import { DamageText } from '../ui/DamageText.js';
+import { MainMenu } from '../ui/MainMenu.js';
+import { HeroSelectionScreen } from '../ui/HeroSelectionScreen.js';
+import { LevelUpScreen } from '../ui/LevelUpScreen.js';
 
 export class Game {
   constructor(canvas, context, resourceManager) {

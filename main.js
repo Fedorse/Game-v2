@@ -1,4 +1,4 @@
-import { Game } from './game.js';
+import { Game } from './core/Game.js';
 import { ResourceManager } from './utils/ResourceManager.js';
 
 const canvas = document.getElementById('canvas');

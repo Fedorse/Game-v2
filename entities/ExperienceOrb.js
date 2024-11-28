@@ -1,7 +1,7 @@
-import { Animation } from './Animation';
-import { Sprite } from './Sprite';
-import { expirenseOrbAnim } from './animations/expirenseOrbAnim.js';
-import { Entity } from './core/Entity.js';
+import { Animation } from '../sprite/Animation.js';
+import { Sprite } from '../sprite/Sprite.js';
+import { expirenseOrbAnim } from '../utils/animations/expirenseOrbAnim.js';
+import { Entity } from './Entity.js';
 
 export class ExperienceOrb extends Entity {
   constructor(game, position) {

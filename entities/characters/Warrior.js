@@ -1,15 +1,16 @@
-import { Entity } from '../core/Entity.js';
-import { Sprite } from '../Sprite.js';
-import { Animation } from '../Animation.js';
+import { Entity } from '../Entity.js';
+import { Sprite } from '../../sprite/Sprite.js';
+import { Animation } from '../../sprite/Animation.js';
 import {
   playerIdleFrames,
   playerWalkFrames,
-} from '../animations/playerAnim.js';
-import { WeaponManager } from '../weapon/WeaponManager.js';
-import { SwordWeapon } from '../weapon/SwordWeapon.js';
+} from '../../utils/animations/playerAnim.js';
+import { WeaponManager } from '../../managers/WeaponManager.js';
+import { SwordWeapon } from '../../weapon/SwordWeapon.js';
 
-import { StateMachine } from '../core/StateMachine.js';
-import { IdleState, WalkState } from './CharacterStates.js';
+import { StateMachine } from '../../states/StateMachine.js';
+import { IdleState } from './characterStrates/IdleState.js';
+import { WalkState } from './characterStrates/WalkState.js';
 
 export class Warrior extends Entity {
   constructor(game) {

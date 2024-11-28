@@ -1,11 +1,12 @@
-import { Entity } from '../core/Entity.js';
-import { Sprite } from '../Sprite.js';
-import { Animation } from '../Animation.js';
-import { run, idle } from '../animations/hunterAnim.js';
-import { WeaponManager } from '../weapon/WeaponManager.js';
-import { Bow } from '../weapon/Bow.js';
-import { StateMachine } from '../core/StateMachine.js';
-import { IdleState, WalkState } from './CharacterStates.js';
+import { Entity } from '../Entity.js';
+import { Sprite } from '../../sprite/Sprite.js';
+import { Animation } from '../../sprite/Animation.js';
+import { run, idle } from '../../utils/animations/hunterAnim.js';
+import { WeaponManager } from '../../managers/WeaponManager.js';
+import { Bow } from '../../weapon/Bow.js';
+import { StateMachine } from '../../states/StateMachine.js';
+import { IdleState } from './characterStrates/IdleState.js';
+import { WalkState } from './characterStrates/WalkState.js';
 
 export class Hunter extends Entity {
   constructor(game) {

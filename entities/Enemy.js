@@ -1,14 +1,12 @@
-import { StateMachine } from '../core/StateMachine.js';
-import { Sprite } from '../Sprite.js';
-import { Animation } from '../Animation.js';
+import { StateMachine } from '../states/StateMachine.js';
+import { Sprite } from '../sprite/Sprite.js';
+import { Animation } from '../sprite/Animation.js';
 import { ENEMY_CONFIGS } from '../configs/enemyConfigs.js';
-import { Entity } from '../core/Entity.js';
-import {
-  EnemyAttackState,
-  EnemyChaseState,
-  EnemyIdleState,
-} from './EnemyStates.js';
-import { ExperienceOrb } from '../ExperienceOrb.js';
+import { Entity } from './Entity.js';
+import { EnemyAttackState } from './enemy/enemyStates/EnemyAttackState.js';
+import { EnemyChaseState } from './enemy/enemyStates/EnemyChaseState.js';
+import { EnemyIdleState } from './enemy/enemyStates/EnemyIdleState.js';
+import { ExperienceOrb } from './ExperienceOrb.js';
 
 export class Enemy extends Entity {
   constructor(game, position, type) {

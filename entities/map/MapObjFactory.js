@@ -1,5 +1,5 @@
-import { MAP_CONFIG } from '../configs/mapConfig.js';
-import { StaticEntity } from './StaticEntity.js';
+import { MAP_CONFIG } from '../../configs/mapConfig.js';
+import { StaticEntity } from '../StaticEntity.js';
 export class MapObjFactory {
   constructor(game) {
     this.game = game;

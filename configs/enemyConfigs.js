@@ -1,6 +1,6 @@
-import { mushroomWalkAnim } from '../animations/mushroomWalkAnim';
-import { skeletonWalkAnim } from '../animations/skeletonWalkAnim';
-import { pigletWalkAnim } from '../animations/pigletWalkAnim';
+import { mushroomWalkAnim } from '../utils/animations/mushroomWalkAnim';
+import { skeletonWalkAnim } from '../utils/animations/skeletonWalkAnim';
+import { pigletWalkAnim } from '../utils/animations/pigletWalkAnim';
 export const ENEMY_CONFIGS = {
   SKELETON: {
     name: 'skeleton',

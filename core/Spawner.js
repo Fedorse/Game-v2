@@ -1,5 +1,5 @@
-import { EnemyFactory } from './enemy/EnemyFactory.js';
-import { SPAWN_CONFIG } from './configs/spawnerConfig.js';
+import { EnemyFactory } from '../entities/enemy/EnemyFactory.js';
+import { SPAWN_CONFIG } from '../configs/spawnerConfig.js';
 export class Spawner {
   constructor(game) {
     (this.game = game), (this.enemyFactory = new EnemyFactory(this.game));

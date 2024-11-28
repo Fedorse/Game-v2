@@ -1,6 +1,6 @@
 import { UIButton } from './uiButton';
 import { HeroIcon } from './HeroIcon';
-import { HEROES } from '../configs/Heroes';
+import { HEROES } from '../configs/charatresConfig';
 
 export class HeroSelectionScreen {
   // Константы для разметки

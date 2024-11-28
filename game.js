@@ -9,6 +9,8 @@ import { Hunter } from './characters/Hunter.js';
 import { DamageText } from './ui/DamageText.js';
 import { MainMenu } from './ui/MainMenu.js';
 import { HeroSelectionScreen } from './ui/HeroSelectionScreen.js';
+import { LevelUpScreen } from './ui/LevelUpScreen.js';
+
 export class Game {
   constructor(canvas, context, resourceManager) {
     this.canvas = canvas;
@@ -33,6 +35,7 @@ export class Game {
     this.isPaused = false;
     this.state = 'menu'; // state game 'menu', 'heroSelection', 'playing'
     this.mainMenu = new MainMenu(this);
+    this.levelUpScreen = new LevelUpScreen(this, this.player);
     this.start();
   }
 
@@ -126,6 +129,7 @@ export class Game {
       this.mapGenerator.generateMap(this.context, this.camera);
       this.mapObjects.forEach((object) => object.render(this.context));
       this.player.render(this.context);
+
       this.enemies.forEach((enemy) => enemy.render(this.context));
       this.experienceOrbs.forEach((orb) => orb.render(this.context));
       this.projectiles.forEach((projectil) => projectil.render(this.context));
@@ -133,6 +137,9 @@ export class Game {
         text.render(this.context, this.camera)
       );
       this.ui.render(this.context);
+      if (this.levelUpScreen?.visible) {
+        this.levelUpScreen.render(this.context);
+      }
     }
   }
 }

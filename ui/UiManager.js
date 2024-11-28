@@ -25,7 +25,7 @@ export class UiManager {
     // experience bar player ui
     this.renderExperienceBar(context);
     // pause ui
-    this.rednderPause(context);
+    // this.rednderPause(context);
   }
 
   rednderPause(context) {

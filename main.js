@@ -48,6 +48,7 @@ const imagesLoad = [
   { name: 'warriorIcon', src: '../public/assets/GUI/warriorIcon.png' },
   { name: 'bgStats', src: '../public/assets/GUI/heroStats.png' },
   { name: 'healthBar', src: '../public/assets/GUI/helathBar.png' },
+  { name: 'card', src: '../public/assets/GUI/cardLevel.png' },
 ];
 
 resourceManager

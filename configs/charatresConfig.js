@@ -1,4 +1,4 @@
-export const HEROES = [
+export const CHARACTERS = [
   {
     type: 'warrior',
     name: 'Warrior',

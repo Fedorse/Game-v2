@@ -1,9 +1,9 @@
-import { UIButton } from './uiButton';
-import { HeroIcon } from './HeroIcon';
-import { HEROES } from '../configs/charatresConfig';
+import { Screen } from './Screen.js';
+import { UIIcon } from '../components/UIIcon.js';
+import { CHARACTERS } from '../../configs/charatresConfig.js';
+import { UIButton } from '../components/UIButton.js';
 
-export class HeroSelectionScreen {
-  // Константы для разметки
+export class HeroSelectionScreen extends Screen {
   static LAYOUT = {
     HEROES: {
       ICON_SIZE: 100,
@@ -24,12 +24,11 @@ export class HeroSelectionScreen {
       TOP_MARGIN: 50,
     },
   };
-
   constructor(game) {
-    this.game = game;
+    super(game);
     this.bg = this.game.resourceManager.getImage('heroBg');
     this.infoBg = this.game.resourceManager.getImage('bgStats');
-    this.heroes = HEROES;
+    this.heroes = CHARACTERS;
     this.selectedHero = this.heroes[0];
 
     this.heroIcons = [];
@@ -83,7 +82,7 @@ export class HeroSelectionScreen {
     this.heroes.forEach((hero, index) => {
       const x = startX + index * (layout.ICON_SIZE + layout.SPACING);
 
-      const icon = new HeroIcon(
+      const icon = new UIIcon(
         this.game,
         x,
         y,

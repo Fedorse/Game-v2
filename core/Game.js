@@ -1,4 +1,3 @@
-// import { Player } from './Player.js'
 import { InputHandler } from '../utils/InputHandler.js';
 import { Spawner } from './Spawner.js';
 import { Camera } from './Camera.js';
@@ -7,23 +6,21 @@ import { UiManager } from '../managers/UiManager.js';
 import { Warrior } from '../entities/characters/Warrior.js';
 import { Hunter } from '../entities/characters/Hunter.js';
 import { DamageText } from '../ui/DamageText.js';
-import { MainMenu } from '../ui/MainMenu.js';
-import { HeroSelectionScreen } from '../ui/HeroSelectionScreen.js';
-import { LevelUpScreen } from '../ui/LevelUpScreen.js';
+import { MainMenuScreen } from '../ui/screens/MainMenuScreen.js';
+import { HeroSelectionScreen } from '../ui/screens/HeroSelectionScreen.js';
+import { AugmentScreen } from '../ui/screens/AugmentScreen.js';
 
 export class Game {
   constructor(canvas, context, resourceManager) {
     this.canvas = canvas;
     this.context = context;
     this.resourceManager = resourceManager;
-    // this.player = new Player(this)
     this.inputHandler = new InputHandler(this);
     this.spawner = new Spawner(this);
     this.ui = new UiManager(this, null);
     this.camera = new Camera(0, 0, canvas.width, canvas.height, this);
     this.enemies = [];
     this.mapGenerator = new MapGenerator(this);
-    console.log(this.mainMenu);
     this.mapObjects = this.mapGenerator.mapObjects;
     this.experienceOrbs = [];
     this.projectiles = [];
@@ -34,8 +31,8 @@ export class Game {
     this.elapsedTime = 0;
     this.isPaused = false;
     this.state = 'menu'; // state game 'menu', 'heroSelection', 'playing'
-    this.mainMenu = new MainMenu(this);
-    this.levelUpScreen = new LevelUpScreen(this, this.player);
+    this.mainMenu = new MainMenuScreen(this);
+    this.augmentScreen = new AugmentScreen(this, this.player);
     this.start();
   }
 
@@ -137,8 +134,8 @@ export class Game {
         text.render(this.context, this.camera)
       );
       this.ui.render(this.context);
-      if (this.levelUpScreen?.visible) {
-        this.levelUpScreen.render(this.context);
+      if (this.augmentScreen?.visible) {
+        this.augmentScreen.render(this.context);
       }
     }
   }

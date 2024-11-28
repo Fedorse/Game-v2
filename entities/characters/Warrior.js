@@ -25,7 +25,7 @@ export class Warrior extends Entity {
       defence: 10,
       level: 1,
       experience: 0,
-      nextLevelExperience: 30,
+      nextLevelExperience: 10,
     };
 
     // animations
@@ -108,7 +108,7 @@ export class Warrior extends Entity {
     this.stats.nextLevelExperience += 100;
     this.stats.defence += 10;
     this.weaponManager.gainExperience(100);
-    this.game.levelUpScreen.show();
+    this.game.augmentScreen.show();
   }
 
   takeDamage(damage) {

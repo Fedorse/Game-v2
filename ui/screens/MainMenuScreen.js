@@ -1,7 +1,9 @@
-import { UIButton } from './uiButton.js';
-export class MainMenu {
+import { Screen } from './Screen.js';
+import { UIButton } from '../components/UIButton.js';
+
+export class MainMenuScreen extends Screen {
   constructor(game) {
-    this.game = game;
+    super(game);
     this.bg = this.game.resourceManager.getImage('menu');
     this.buttons = this.createButtons();
   }
@@ -38,6 +40,7 @@ export class MainMenu {
     ];
   }
   render(context) {
+    if (!this.visible) return;
     context.drawImage(
       this.bg,
       0,

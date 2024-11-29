@@ -1,6 +1,6 @@
 import { Screen } from './Screen.js';
 import { UICard } from '../components/UICard.js';
-import { SwordWeapon } from '../../weapon/SwordWeapon.js';
+import { SwordWeapon } from '../../weapons/SwordWeapon.js';
 
 export class AugmentScreen extends Screen {
   static LAYOUT = {

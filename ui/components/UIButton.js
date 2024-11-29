@@ -1,67 +1,39 @@
 import { UIComponent } from './UIComponent.js';
+import { UIText } from './UIText.js';
+
 export class UIButton extends UIComponent {
   constructor(game, x, y, width, height, images, text, onClick) {
     super(game, x, y, width, height);
-    this.images = images; // {normal, hover, pressed}
+    this.images = images;
     this.text = text;
-    this.onClick = onClick;
     this.isPressed = false;
-    this.isEnabled = true;
+    this.onClick = onClick;
+    this.textComponent = new UIText(game, x + width / 2, y + height / 2, {
+      text: this.text,
+      font: '20px Arial',
+      color: 'black',
+      align: 'center',
+      baseline: 'middle',
+    });
 
-    this.addMouseEvents();
-  }
-  addMouseEvents() {
-    this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
-
-    this.game.canvas.addEventListener('mousemove', this.handleMouseMove);
-    this.game.canvas.addEventListener('mousedown', this.handleMouseDown);
-    this.game.canvas.addEventListener('mouseup', this.handleMouseUp);
-  }
-  removeMouseEvents() {
-    this.game.canvas.removeEventListener('mousemove', this.handleMouseMove);
-    this.game.canvas.removeEventListener('mousedown', this.handleMouseDown);
-    this.game.canvas.removeEventListener('mouseup', this.handleMouseUp);
+    this.addEvents();
   }
 
-  handleMouseMove(event) {
-    if (!this.isEnabled) return;
-    const rect = this.game.canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    this.isHovered = this.isInside(x, y);
+  onMouseDown() {
+    this.isPressed = true;
   }
 
-  handleMouseDown(event) {
-    if (!this.isEnabled) return;
-    if (this.isHovered) {
-      this.isPressed = true;
-    }
-  }
-
-  handleMouseUp(event) {
-    if (!this.isEnabled) return;
-    if (this.isPressed && this.isHovered) {
-      this.onClick();
+  onMouseUp() {
+    if (this.isPressed) {
+      this.onClick?.();
     }
     this.isPressed = false;
   }
 
   render(context) {
     if (!this.visible) return;
-    let image;
-    if (!this.isEnabled) {
-      image = this.images.normal;
-    } else if (this.isPressed) {
-      image = this.images.pressed;
-    } else if (this.isHovered) {
-      image = this.images.hover;
-    } else {
-      image = this.images.normal;
-    }
 
+    const image = this.getButtonImage();
     context.drawImage(
       image,
       this.position.x,
@@ -69,16 +41,19 @@ export class UIButton extends UIComponent {
       this.width,
       this.height
     );
+    this.textComponent.render(context);
+  }
 
-    if (this.text) {
-      context.fillStyle = 'black';
-      context.font = '20px Arial';
-      context.textAlign = 'center';
-      context.textBaseline = 'middle';
-
-      const textX = this.position.x + this.width / 2;
-      const textY = this.position.y + this.height / 2;
-      context.fillText(this.text, textX, textY);
+  getButtonImage() {
+    if (!this.isEnabled) {
+      return this.images.disabled || this.images.normal;
     }
+    if (this.isPressed) {
+      return this.images.pressed;
+    }
+    if (this.isHovered) {
+      return this.images.hover;
+    }
+    return this.images.normal;
   }
 }

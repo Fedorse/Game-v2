@@ -51,6 +51,6 @@ export class MainMenuScreen extends Screen {
     this.buttons.forEach((button) => button.render(context));
   }
   removeEvents() {
-    this.buttons.forEach((button) => button.removeMouseEvents());
+    this.buttons.forEach((button) => button.removeEvents());
   }
 }

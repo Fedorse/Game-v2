@@ -1,9 +1,9 @@
 import { Entity } from '../Entity.js';
-import { Sprite } from '../../sprite/Sprite.js';
-import { Animation } from '../../sprite/Animation.js';
+import { Sprite } from '../../graphics/Sprite.js';
+import { Animation } from '../../graphics/Animation.js';
 import { run, idle } from '../../utils/animations/hunterAnim.js';
 import { WeaponManager } from '../../managers/WeaponManager.js';
-import { Bow } from '../../weapon/Bow.js';
+import { Bow } from '../../weapons/Bow.js';
 import { StateMachine } from '../../states/StateMachine.js';
 import { IdleState } from './characterStrates/IdleState.js';
 import { WalkState } from './characterStrates/WalkState.js';

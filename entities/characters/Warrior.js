@@ -1,12 +1,12 @@
 import { Entity } from '../Entity.js';
-import { Sprite } from '../../sprite/Sprite.js';
-import { Animation } from '../../sprite/Animation.js';
+import { Sprite } from '../../graphics/Sprite.js';
+import { Animation } from '../../graphics/Animation.js';
 import {
   playerIdleFrames,
   playerWalkFrames,
 } from '../../utils/animations/playerAnim.js';
 import { WeaponManager } from '../../managers/WeaponManager.js';
-import { SwordWeapon } from '../../weapon/SwordWeapon.js';
+import { SwordWeapon } from '../../weapons/SwordWeapon.js';
 
 import { StateMachine } from '../../states/StateMachine.js';
 import { IdleState } from './characterStrates/IdleState.js';

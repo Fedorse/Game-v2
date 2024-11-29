@@ -1,5 +1,5 @@
-import { Animation } from '../sprite/Animation.js';
-import { Sprite } from '../sprite/Sprite.js';
+import { Animation } from '../graphics/Animation.js';
+import { Sprite } from '../graphics/Sprite.js';
 import { expirenseOrbAnim } from '../utils/animations/expirenseOrbAnim.js';
 import { Entity } from './Entity.js';
 

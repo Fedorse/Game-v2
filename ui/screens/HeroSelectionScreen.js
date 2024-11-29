@@ -68,7 +68,7 @@ export class HeroSelectionScreen extends Screen {
     this.heroIcons.forEach((icon) => {
       icon.removeEvents();
     });
-    this.runButton.removeMouseEvents();
+    this.runButton.removeEvents();
   }
 
   createHeroIcons() {

@@ -1,6 +1,6 @@
 import { StateMachine } from '../states/StateMachine.js';
-import { Sprite } from '../sprite/Sprite.js';
-import { Animation } from '../sprite/Animation.js';
+import { Sprite } from '../graphics/Sprite.js';
+import { Animation } from '../graphics/Animation.js';
 import { ENEMY_CONFIGS } from '../configs/enemyConfigs.js';
 import { Entity } from './Entity.js';
 import { EnemyAttackState } from './enemy/enemyStates/EnemyAttackState.js';

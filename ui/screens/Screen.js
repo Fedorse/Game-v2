@@ -31,6 +31,7 @@ export class Screen extends UIComponent {
     this.visible = true;
   }
   hide() {
+    this.visible = false;
     this.components.forEach((component) => {
       if (component.removeEvents) {
         component.removeEvents();

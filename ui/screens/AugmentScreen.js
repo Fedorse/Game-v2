@@ -28,7 +28,9 @@ export class AugmentScreen extends Screen {
   show() {
     super.show();
     this.game.isPaused = true;
-    this.createComponents();
+    if (!this.isInitialized) {
+      this.init();
+    }
   }
 
   hide() {
@@ -88,11 +90,13 @@ export class AugmentScreen extends Screen {
         augment,
         () => this.selectAugment(augment)
       );
+      console.log(card);
       this.addComponent(card);
     });
   }
 
   selectAugment(augment) {
+    console.log(augment);
     augment.apply(this.game.player);
     this.hide();
   }

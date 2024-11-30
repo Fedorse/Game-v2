@@ -13,7 +13,7 @@ export class UIIcon extends UIComponent {
   onMouseDown() {
     if (this.isHovered) {
       this.selectionScreen.selectedHero = this.heroData;
-      this.selectionScreen.renderHeroInfo(this.heroData);
+      this.selectionScreen.updateHeroInfo(this.heroData);
     }
   }
 

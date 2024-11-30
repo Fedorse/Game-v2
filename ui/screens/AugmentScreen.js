@@ -1,6 +1,7 @@
 import { Screen } from './Screen.js';
 import { UICard } from '../components/UICard.js';
-import { SwordWeapon } from '../../weapons/SwordWeapon.js';
+import { UIText } from '../components/UIText.js';
+import { AUGMENT_CONFIG } from '../../configs/augmentConfig.js';
 
 export class AugmentScreen extends Screen {
   static LAYOUT = {
@@ -9,75 +10,85 @@ export class AugmentScreen extends Screen {
       HEIGHT: 290,
       SPACING: 30,
     },
+    TITLE: {
+      Y: 60,
+      SUBTITLE_Y: 100,
+    },
   };
   constructor(game) {
     super(game);
     this.visible = false;
-    this.cards = [];
-    this.augments = [
-      {
-        name: 'Health Boost',
-        description: 'Increase max health by 20%',
-        icon: 'healthIcon',
-        apply: (player) => {
-          player.stats.maxHealth *= 1.2;
-          player.stats.currentHealth = player.stats.maxHealth;
-        },
-      },
-      {
-        name: 'Speed Up',
-        description: 'Increase movement speed by 15%',
-        icon: 'speedIcon',
-        apply: (player) => {
-          player.stats.speed *= 1.15;
-        },
-      },
-      {
-        name: 'Defense Up',
-        description: 'Increase defense by 5',
-        icon: 'defenseIcon',
-        apply: (player) => {
-          player.stats.defence += 5;
-        },
-      },
-      {
-        name: 'Sword Master',
-        description: 'Add a sword weapon',
-        icon: 'swordIcon',
-        apply: (player) => {
-          player.weaponManager.addWeapon(SwordWeapon);
-        },
-      },
-    ];
+  }
+
+  createComponents() {
+    this.createTitle();
+    this.createCards();
   }
 
   show() {
-    this.visible = true;
+    super.show();
     this.game.isPaused = true;
-    this.createCards();
+    this.createComponents();
   }
 
   hide() {
     this.visible = false;
     this.game.isPaused = false;
-    this.cards.forEach((card) => card.removeEvents());
-    this.cards = [];
+    this.destroy();
+    this.components = [];
+  }
+
+  destroy() {
+    this.components.forEach((component) => {
+      if (component.removeEvents) {
+        component.removeEvents();
+      }
+    });
+    super.destroy();
+  }
+  getRandomAugments() {
+    return [...AUGMENT_CONFIG].sort(() => Math.random() - 0.5).slice(0, 3);
+  }
+
+  createTitle() {
+    const titleText = new UIText(
+      this.game,
+      this.game.canvas.width / 2,
+      AugmentScreen.LAYOUT.TITLE.Y,
+      {
+        text: 'Level Up!',
+        font: 'bold 36px Arial',
+        align: 'center',
+        color: 'white',
+      }
+    );
+    const subTitileText = new UIText(
+      this.game,
+      this.game.canvas.width / 2,
+      AugmentScreen.LAYOUT.TITLE.SUBTITLE_Y,
+      {
+        text: 'Choose your upgrade',
+        font: '24px Arial',
+        align: 'center',
+        color: 'white',
+      }
+    );
+    this.addComponent(titleText);
+    this.addComponent(subTitileText);
   }
 
   createCards() {
-    const selectedAugments = [...this.augments]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
-
+    const selectedAugments = this.getRandomAugments(3);
     const layout = AugmentScreen.LAYOUT.CARD;
+
     const totalWidth =
       selectedAugments.length * layout.WIDTH +
       (selectedAugments.length - 1) * layout.SPACING;
     const startX = (this.game.canvas.width - totalWidth) / 2;
     const startY = (this.game.canvas.height - layout.HEIGHT) / 2;
 
-    this.cards = selectedAugments.map((augment, index) => {
-      return new UICard(
+    selectedAugments.forEach((augment, index) => {
+      const card = new UICard(
         this.game,
         startX + index * (layout.WIDTH + layout.SPACING),
         startY,
@@ -86,6 +97,7 @@ export class AugmentScreen extends Screen {
         augment,
         () => this.selectAugment(augment)
       );
+      this.addComponent(card);
     });
   }
 
@@ -96,20 +108,9 @@ export class AugmentScreen extends Screen {
 
   render(context) {
     if (!this.visible) return;
-
-    // Затемнение фона
+    // opacity bg
     context.fillStyle = 'rgba(0, 0, 0, 0.7)';
     context.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
-
-    // Заголовок
-    context.fillStyle = 'white';
-    context.font = 'bold 36px Arial';
-    context.textAlign = 'center';
-    context.fillText('Level Up!', this.game.canvas.width / 2, 60);
-    context.font = '24px Arial';
-    context.fillText('Choose your upgrade', this.game.canvas.width / 2, 100);
-
-    // Отрисовка карт
-    this.cards.forEach((card) => card.render(context));
+    super.render(context);
   }
 }

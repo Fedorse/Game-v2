@@ -1,7 +1,8 @@
 import { Screen } from './Screen.js';
 import { UIIcon } from '../components/UIIcon.js';
-import { CHARACTERS } from '../../configs/charatresConfig.js';
 import { UIButton } from '../components/UIButton.js';
+import { UIText } from '../components/UIText.js';
+import { CHARACTERS } from '../../configs/charatresConfig.js';
 
 export class HeroSelectionScreen extends Screen {
   static LAYOUT = {
@@ -14,74 +15,37 @@ export class HeroSelectionScreen extends Screen {
       WIDTH: 600,
       HEIGHT: 400,
       TOP_MARGIN: 10,
-      PADDING: 20,
       LINE_HEIGHT: 30,
     },
     RUN_BUTTON: {
       WIDTH: 150,
       HEIGHT: 50,
-      RIGHT_MARGIN: 50,
-      TOP_MARGIN: 50,
+      MARGIN: 50,
     },
   };
+
   constructor(game) {
     super(game);
-    this.bg = this.game.resourceManager.getImage('heroBg');
-    this.infoBg = this.game.resourceManager.getImage('bgStats');
-    this.heroes = CHARACTERS;
-    this.selectedHero = this.heroes[0];
+    this.selectedHero = CHARACTERS[0];
+    this.init();
+  }
 
-    this.heroIcons = [];
+  createComponents() {
     this.createHeroIcons();
-    this.textBlocks = [];
-
-    this.runButton = new UIButton(
-      this.game,
-      this.game.canvas.width -
-        HeroSelectionScreen.LAYOUT.RUN_BUTTON.WIDTH -
-        HeroSelectionScreen.LAYOUT.RUN_BUTTON.RIGHT_MARGIN,
-      HeroSelectionScreen.LAYOUT.RUN_BUTTON.TOP_MARGIN,
-      HeroSelectionScreen.LAYOUT.RUN_BUTTON.WIDTH,
-      HeroSelectionScreen.LAYOUT.RUN_BUTTON.HEIGHT,
-      {
-        normal: this.game.resourceManager.getImage('btnNormal'),
-        hover: this.game.resourceManager.getImage('btnHover'),
-        pressed: this.game.resourceManager.getImage('btnPressed'),
-      },
-      'Run',
-      () => {
-        if (this.selectedHero) {
-          this.selectHero(this.selectedHero.type);
-        }
-      }
-    );
-    this.runButton.isEnabled = true;
-
-    this.renderHeroInfo(this.selectedHero);
-  }
-  selectHero(heroType) {
-    this.removeEvents();
-    this.game.setPlayerHero(heroType);
-    this.game.state = 'playing';
-  }
-  removeEvents() {
-    this.heroIcons.forEach((icon) => {
-      icon.removeEvents();
-    });
-    this.runButton.removeEvents();
+    this.createRunButton();
+    this.createHeroInfo();
   }
 
   createHeroIcons() {
     const layout = HeroSelectionScreen.LAYOUT.HEROES;
     const totalWidth =
-      this.heroes.length * layout.ICON_SIZE +
-      (this.heroes.length - 1) * layout.SPACING;
+      CHARACTERS.length * layout.ICON_SIZE +
+      (CHARACTERS.length - 1) * layout.SPACING;
     const startX = (this.game.canvas.width - totalWidth) / 2;
     const y = this.game.canvas.height - layout.ICON_SIZE - layout.BOTTOM_MARGIN;
 
-    this.heroes.forEach((hero, index) => {
+    CHARACTERS.forEach((hero, index) => {
       const x = startX + index * (layout.ICON_SIZE + layout.SPACING);
-
       const icon = new UIIcon(
         this.game,
         x,
@@ -91,86 +55,92 @@ export class HeroSelectionScreen extends Screen {
         hero,
         this
       );
-
-      this.heroIcons.push(icon);
+      this.addComponent(icon);
     });
   }
 
-  renderHeroInfo(hero) {
-    this.textBlocks = [
+  createRunButton() {
+    const layout = HeroSelectionScreen.LAYOUT.RUN_BUTTON;
+    const button = new UIButton(
+      this.game,
+      this.game.canvas.width - layout.WIDTH - layout.MARGIN,
+      layout.MARGIN,
+      layout.WIDTH,
+      layout.HEIGHT,
       {
-        text: hero.name,
-        x: this.game.canvas.width / 2,
-        y: 140,
-        font: 'bold 32px Arial',
-        align: 'center',
+        normal: this.game.resourceManager.getImage('btnNormal'),
+        hover: this.game.resourceManager.getImage('btnHover'),
+        pressed: this.game.resourceManager.getImage('btnPressed'),
+      },
+      'Run',
+      () => this.startGame()
+    );
+    this.addComponent(button);
+  }
+
+  createHeroInfo() {
+    const infoTexts = [
+      {
+        text: this.selectedHero.name,
+        options: { font: 'bold 32px Arial', y: 140 },
       },
       {
-        text: hero.description,
-        x: this.game.canvas.width / 2,
-        y: 180,
-        font: '20px Arial',
-        align: 'center',
+        text: this.selectedHero.description,
+        options: { font: '20px Arial', y: 180 },
       },
       {
-        text: `Health: ${hero.characteristics.health}`,
-        x: this.game.canvas.width / 2,
-        y: 220,
-        font: '20px Arial',
-        align: 'center',
-      },
-      {
-        text: `Attack: ${hero.characteristics.attack}`,
-        x: this.game.canvas.width / 2,
-        y: 250,
-        font: '20px Arial',
-        align: 'center',
-      },
-      {
-        text: `Defense: ${hero.characteristics.defense}`,
-        x: this.game.canvas.width / 2,
-        y: 280,
-        font: '20px Arial',
-        align: 'center',
+        text: `Health: ${this.selectedHero.characteristics.health}`,
+        options: { font: '20px Arial', y: 220 },
       },
     ];
+
+    infoTexts.forEach(({ text, options }) => {
+      const textComponent = new UIText(
+        this.game,
+        this.game.canvas.width / 2,
+        options.y,
+        {
+          text,
+          font: options.font,
+          color: 'black',
+          align: 'center',
+        }
+      );
+      this.addComponent(textComponent);
+    });
   }
 
-  renderText(context) {
-    this.textBlocks.forEach((block) => {
-      context.font = block.font;
-      context.textAlign = block.align;
-      context.fillStyle = 'black';
-      context.fillText(block.text, block.x, block.y);
-    });
+  updateHeroInfo(hero) {
+    this.selectedHero = hero;
+    this.components = this.components.filter((c) => !(c instanceof UIText));
+    this.createHeroInfo();
+  }
+
+  startGame() {
+    this.destroy();
+    this.game.setPlayerHero(this.selectedHero.type);
+    this.game.state = 'playing';
   }
 
   render(context) {
-    if (this.bg) {
-      context.drawImage(
-        this.bg,
-        0,
-        0,
-        this.game.canvas.width,
-        this.game.canvas.height
-      );
-    }
+    const bg = this.game.resourceManager.getImage('heroBg');
+    const infoBg = this.game.resourceManager.getImage('bgStats');
 
-    if (this.infoBg) {
-      const layout = HeroSelectionScreen.LAYOUT.INFO;
-      const infoX = (this.game.canvas.width - layout.WIDTH) / 2;
-      const infoY = layout.TOP_MARGIN;
-      context.drawImage(this.infoBg, infoX, infoY, layout.WIDTH, layout.HEIGHT);
-    }
+    context.drawImage(
+      bg,
+      0,
+      0,
+      this.game.canvas.width,
+      this.game.canvas.height
+    );
+    context.drawImage(
+      infoBg,
+      (this.game.canvas.width - HeroSelectionScreen.LAYOUT.INFO.WIDTH) / 2,
+      HeroSelectionScreen.LAYOUT.INFO.TOP_MARGIN,
+      HeroSelectionScreen.LAYOUT.INFO.WIDTH,
+      HeroSelectionScreen.LAYOUT.INFO.HEIGHT
+    );
 
-    // Рисуем текст
-    this.renderText(context);
-
-    // Рендер кнопок и иконок
-    this.heroIcons.forEach((icon) => {
-      icon.render(context);
-    });
-
-    this.runButton.render(context);
+    super.render(context);
   }
 }

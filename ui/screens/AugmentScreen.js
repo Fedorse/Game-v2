@@ -34,18 +34,9 @@ export class AugmentScreen extends Screen {
   hide() {
     this.visible = false;
     this.game.isPaused = false;
-    this.destroy();
-    this.components = [];
+    this.destroy(false);
   }
 
-  destroy() {
-    this.components.forEach((component) => {
-      if (component.removeEvents) {
-        component.removeEvents();
-      }
-    });
-    super.destroy();
-  }
   getRandomAugments() {
     return [...AUGMENT_CONFIG].sort(() => Math.random() - 0.5).slice(0, 3);
   }

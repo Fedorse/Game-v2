@@ -12,9 +12,16 @@ export class Screen extends UIComponent {
     this.initEvents();
     this.isInitialized = true;
   }
-  destroy() {
-    this.removeEvents();
-    this.components = [];
+  destroy(removeComponents = true) {
+    this.components.forEach((component) => {
+      if (component.removeEvents) {
+        component.removeEvents();
+      }
+    });
+
+    if (removeComponents) {
+      this.components = [];
+    }
     this.isInitialized = false;
   }
   show() {
@@ -24,7 +31,11 @@ export class Screen extends UIComponent {
     this.visible = true;
   }
   hide() {
-    this.visible = false;
+    this.components.forEach((component) => {
+      if (component.removeEvents) {
+        component.removeEvents();
+      }
+    });
   }
   addComponent(component) {
     this.components.push(component);

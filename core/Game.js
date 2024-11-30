@@ -43,7 +43,7 @@ export class Game {
 
   startGame() {
     this.state = 'heroSelection';
-    this.mainMenu.removeEvents();
+    this.mainMenu.destroy();
     this.heroSelectionScreen = new HeroSelectionScreen(this);
   }
   setPlayerHero(heroType) {
@@ -57,8 +57,6 @@ export class Game {
     }
 
     this.ui.setPlayer(this.player);
-
-    this.heroSelectionScreen = null;
   }
 
   pause() {

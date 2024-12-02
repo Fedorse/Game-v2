@@ -67,6 +67,7 @@ export class Enemy extends Entity {
 
   takeDamage(damage) {
     this.currentHealth -= damage;
+    this.game.soundController.playSound('takeDamageCharacter');
     this.game.addDamageText(
       {
         x: this.position.x + this.width / 2,

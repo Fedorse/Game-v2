@@ -1,5 +1,6 @@
 import { Game } from './core/Game.js';
 import { ResourceManager } from './utils/ResourceManager.js';
+import { AUDIO_CONFIG } from './configs/audioConfig.js';
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
@@ -53,6 +54,7 @@ const imagesLoad = [
 
 resourceManager
   .loadImages(imagesLoad)
+  .then(() => resourceManager.loadAudios(AUDIO_CONFIG))
   .then(() => {
     const game = new Game(canvas, context, resourceManager);
     game.start();

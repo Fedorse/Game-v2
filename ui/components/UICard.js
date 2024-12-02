@@ -46,6 +46,7 @@ export class UICard extends UIComponent {
   }
 
   onMouseDown() {
+    this.game.soundController.playSound('eventClick');
     this.onClick?.();
   }
 

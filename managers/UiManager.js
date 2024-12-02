@@ -14,7 +14,7 @@ export class UiManager {
     this.initComponents();
   }
   initComponents() {
-    this.components = []; // Сбрасываем текущие компоненты
+    this.components = [];
     if (this.player) {
       this.components.push(new HealthBar(this.game, this.player));
       this.components.push(new ExperienceBar(this.game, this.player));

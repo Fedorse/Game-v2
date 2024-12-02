@@ -9,6 +9,7 @@ import { DamageText } from '../ui/DamageText.js';
 import { MainMenuScreen } from '../ui/screens/MainMenuScreen.js';
 import { HeroSelectionScreen } from '../ui/screens/HeroSelectionScreen.js';
 import { AugmentScreen } from '../ui/screens/AugmentScreen.js';
+import { SoundController } from '../utils/SoundContoller.js';
 
 export class Game {
   constructor(canvas, context, resourceManager) {
@@ -21,6 +22,7 @@ export class Game {
     this.camera = new Camera(0, 0, canvas.width, canvas.height, this);
     this.enemies = [];
     this.mapGenerator = new MapGenerator(this);
+    this.soundController = new SoundController(this.resourceManager);
     this.mapObjects = this.mapGenerator.mapObjects;
     this.experienceOrbs = [];
     this.projectiles = [];
@@ -55,7 +57,7 @@ export class Game {
         this.player = new Hunter(this);
         break;
     }
-
+    this.soundController.playMusic('mainTheme');
     this.ui.setPlayer(this.player);
   }
 

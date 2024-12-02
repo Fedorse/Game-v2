@@ -18,6 +18,7 @@ export class AugmentScreen extends Screen {
   constructor(game) {
     super(game);
     this.visible = false;
+    this.previousMusicVolume = 0;
   }
 
   createComponents() {
@@ -28,6 +29,8 @@ export class AugmentScreen extends Screen {
   show() {
     super.show();
     this.game.isPaused = true;
+    this.previousMusicVolume = this.game.soundController.musicVolume;
+    this.game.soundController.setMusicVolume(this.previousMusicVolume * 0.2);
     if (!this.isInitialized) {
       this.init();
     }
@@ -36,6 +39,7 @@ export class AugmentScreen extends Screen {
   hide() {
     this.visible = false;
     this.game.isPaused = false;
+    this.game.soundController.setMusicVolume(this.previousMusicVolume);
     this.destroy(false);
   }
 

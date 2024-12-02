@@ -8,7 +8,7 @@ export class HealthBar extends UIComponent {
 
   render(context) {
     if (!this.visible) return;
-
+    
     const currentHealth = this.player.stats.currentHealth;
     const maxHealth = this.player.stats.maxHealth;
     const healthPercentage = currentHealth / maxHealth;

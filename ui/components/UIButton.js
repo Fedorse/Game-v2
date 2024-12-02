@@ -25,6 +25,7 @@ export class UIButton extends UIComponent {
 
   onMouseUp() {
     if (this.isPressed) {
+      this.game.soundController.playSound('eventClick');
       this.onClick?.();
     }
     this.isPressed = false;

@@ -12,6 +12,7 @@ export class UIIcon extends UIComponent {
 
   onMouseDown() {
     if (this.isHovered) {
+      this.game.soundController.playSound('eventClick');
       this.selectionScreen.selectedHero = this.heroData;
       this.selectionScreen.updateHeroInfo(this.heroData);
     }

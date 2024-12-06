@@ -6,10 +6,8 @@ import { UiManager } from '../managers/UiManager.js';
 import { Warrior } from '../entities/characters/Warrior.js';
 import { Hunter } from '../entities/characters/Hunter.js';
 import { DamageText } from '../ui/DamageText.js';
-import { MainMenuScreen } from '../ui/screens/MainMenuScreen.js';
-import { HeroSelectionScreen } from '../ui/screens/HeroSelectionScreen.js';
-import { AugmentScreen } from '../ui/screens/AugmentScreen.js';
 import { SoundController } from '../utils/SoundContoller.js';
+import { ScreenManager } from '../managers/ScreenManager.js';
 
 export class Game {
   constructor(canvas, context, resourceManager) {
@@ -33,21 +31,30 @@ export class Game {
     this.elapsedTime = 0;
     this.isPaused = false;
     this.state = 'menu'; // state game 'menu', 'heroSelection', 'playing'
-    this.mainMenu = new MainMenuScreen(this);
-    this.augmentScreen = new AugmentScreen(this, this.player);
-    this.start();
+    this.screenManager = new ScreenManager(this);
+    this.screenManager.showScreen('mainMenu');
+  }
+
+  togglePause() {
+    this.isPaused = !this.isPaused;
+    if (this.isPaused) {
+      this.soundController.setMusicVolume(
+        this.soundController.musicVolume * 0.2
+      );
+      this.screenManager.showScreen('pause');
+    } else {
+      this.soundController.setMusicVolume(
+        this.soundController.musicVolume / 0.2
+      );
+      this.screenManager.hideScreen('pause');
+    }
   }
 
   start() {
     this.lastTime = 0;
-    requestAnimationFrame(this.gameLoop.bind(this)); // start game loop
+    requestAnimationFrame(this.gameLoop.bind(this));
   }
 
-  startGame() {
-    this.state = 'heroSelection';
-    this.mainMenu.destroy();
-    this.heroSelectionScreen = new HeroSelectionScreen(this);
-  }
   setPlayerHero(heroType) {
     switch (heroType) {
       case 'warrior':
@@ -57,12 +64,10 @@ export class Game {
         this.player = new Hunter(this);
         break;
     }
-    this.soundController.playMusic('mainTheme');
     this.ui.setPlayer(this.player);
-  }
-
-  pause() {
-    this.isPaused = !this.isPaused;
+    this.state = 'playing';
+    this.screenManager.hideScreen('heroSelection');
+    this.soundController.playMusic('mainTheme');
   }
 
   gameLoop(timeStamp) {
@@ -73,9 +78,7 @@ export class Game {
       this.elapsedTime += this.deltaTime;
       this.update(this.deltaTime);
     }
-
     this.render();
-
     if (!this.gameOver) {
       requestAnimationFrame(this.gameLoop.bind(this));
     } else {
@@ -85,10 +88,30 @@ export class Game {
   addDamageText(position, damage) {
     this.damageTexts.push(new DamageText(position, damage));
   }
+  resetGame() {
+    this.player = null;
+    this.enemies = [];
+    this.projectiles = [];
+    this.experienceOrbs = [];
+    this.damageTexts = [];
+    this.ui = new UiManager(this, null);
+    this.spawner = new Spawner(this);
+    this.camera = new Camera(0, 0, this.canvas.width, this.canvas.height, this);
+
+    this.soundController.stopMusic();
+
+    this.isPaused = false;
+    this.gameOver = false;
+    this.elapsedTime = 0;
+    this.state = 'menu';
+  }
 
   update(deltaTime) {
-    this.enemies.forEach((enemy) => {
+    this.enemies.forEach((enemy, index) => {
       enemy.update(deltaTime);
+      if (enemy.toRemove) {
+        this.enemies.splice(index, 1);
+      }
     });
 
     this.experienceOrbs.forEach((orb, index) => {
@@ -104,9 +127,12 @@ export class Game {
         this.projectiles.splice(index, 1);
       }
     });
-    this.mapObjects.forEach((object) => object.update(deltaTime));
-    this.enemies = this.enemies.filter((enemy) => !enemy.toRemove);
-    this.mapObjects = this.mapObjects.filter((object) => !object.toRemove);
+    this.mapObjects.forEach((object, index) => {
+      object.update(deltaTime);
+      if (object.toRemove) {
+        this.mapObjects.splice(index, 1);
+      }
+    });
     this.mapGenerator.checkCollisions();
     this.player.update(deltaTime);
     this.camera.follow(this.player);
@@ -116,13 +142,10 @@ export class Game {
     this.ui.update(this.player);
   }
 
-  // render game objects
   render() {
-    if (this.state === 'menu') {
-      this.mainMenu.render(this.context);
-    } else if (this.state === 'heroSelection') {
-      this.heroSelectionScreen.render(this.context);
-    } else if (this.state === 'playing') {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    if (this.state === 'playing') {
       this.mapGenerator.generateMap(this.context, this.camera);
       this.mapObjects.forEach((object) => object.render(this.context));
       this.player.render(this.context);
@@ -134,9 +157,7 @@ export class Game {
         text.render(this.context, this.camera)
       );
       this.ui.render(this.context);
-      if (this.augmentScreen?.visible) {
-        this.augmentScreen.render(this.context);
-      }
     }
+    this.screenManager.render(this.context);
   }
 }

@@ -64,14 +64,17 @@ export class MapGenerator {
     const tileX = tileInfo.col * this.tileWidth;
     const tileY = tileInfo.row * this.tileHeight;
 
+    const destX = Math.floor(x - camera.x);
+    const destY = Math.floor(y - camera.y);
+
     context.drawImage(
       this.tileSetImage,
       tileX,
       tileY,
       this.tileWidth,
       this.tileHeight,
-      x - camera.x,
-      y - camera.y,
+      destX,
+      destY,
       this.tileWidth,
       this.tileHeight
     );

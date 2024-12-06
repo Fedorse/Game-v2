@@ -34,15 +34,6 @@ export class UIIcon extends UIComponent {
         this.width,
         this.height
       );
-    } else {
-      // Fallback
-      context.fillStyle = 'gray';
-      context.fillRect(
-        this.position.x,
-        this.position.y,
-        this.width,
-        this.height
-      );
     }
   }
   renderSelectionIndicator(context) {

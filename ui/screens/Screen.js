@@ -1,51 +1,37 @@
-import { UIComponent } from '../components/UIComponent.js';
-export class Screen extends UIComponent {
+export class Screen {
   constructor(game) {
-    super(game, 0, 0, game.canvas.width, game.canvas.height);
+    this.game = game;
     this.components = [];
     this.isInitialized = false;
-    console.log(this.components);
+    this.width = game.canvas.width;
+    this.height = game.canvas.height;
   }
   init() {
     if (this.isInitialized) return;
     this.createComponents();
-    this.initEvents();
     this.isInitialized = true;
   }
-  destroy(removeComponents = true) {
-    this.components.forEach((component) => {
-      if (component.removeEvents) {
-        component.removeEvents();
-      }
-    });
 
-    if (removeComponents) {
-      this.components = [];
-    }
-    this.isInitialized = false;
-  }
   show() {
     if (!this.isInitialized) {
       this.init();
     }
-    this.visible = true;
   }
   hide() {
-    this.visible = false;
     this.components.forEach((component) => {
       if (component.removeEvents) {
         component.removeEvents();
       }
     });
+    this.components = [];
+    this.isInitialized = false;
   }
   addComponent(component) {
     this.components.push(component);
   }
   createComponents() {}
-  initEvents() {}
 
   render(context) {
-    if (!this.visible) return;
     this.components.forEach((component) => component.render(context));
   }
 }

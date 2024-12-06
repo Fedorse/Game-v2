@@ -50,11 +50,11 @@ export class UIButton extends UIComponent {
       return this.images.disabled || this.images.normal;
     }
     if (this.isPressed) {
-      return this.images.pressed;
+      return this.images.pressed || this.images.normal || null;
     }
     if (this.isHovered) {
-      return this.images.hover;
+      return this.images.hover || this.images.normal || null;
     }
-    return this.images.normal;
+    return this.images.normal || this.images.normal || null;
   }
 }

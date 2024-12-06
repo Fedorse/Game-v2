@@ -4,14 +4,13 @@ export class SoundController {
     this.currentMusic = null;
     this.isMusicMuted = false;
     this.isSoundMuted = false;
-    this.musicVolume = 0.2;
-    this.soundVolume = 0.4;
+    this.musicVolume = 0.1;
+    this.soundVolume = 0.1;
   }
   playMusic(name, shouldLoop = true) {
     const audio = this.resourceManager.getAudio(name);
     if (!audio) return;
 
-    // stop current music
     if (this.currentMusic) {
       this.currentMusic.pause();
       this.currentMusic.currentTime = 0;
@@ -39,19 +38,32 @@ export class SoundController {
   setSoundVolume(volume) {
     this.soundVolume = volume;
   }
+
   setMusicVolume(volume) {
     this.musicVolume = volume;
     if (this.currentMusic) {
       this.currentMusic.volume = this.isMusicMuted ? 0 : this.musicVolume;
     }
   }
-  toggleMusic() {
-    this.isMusicMuted = !this.isMusicMuted;
+  muteMusic() {
+    this.isMusicMuted = true;
     if (this.currentMusic) {
-      this.currentMusic.volume = this.isMusicMuted ? 0 : this.musicVolume;
+      this.currentMusic.volume = 0;
     }
   }
-  toggleSound() {
-    this.isSoundMuted = !this.isSoundMuted;
+
+  unmuteMusic() {
+    this.isMusicMuted = false;
+    if (this.currentMusic) {
+      this.currentMusic.volume = this.musicVolume;
+    }
+  }
+
+  muteSound() {
+    this.isSoundMuted = true;
+  }
+
+  unmuteSound() {
+    this.isSoundMuted = false;
   }
 }

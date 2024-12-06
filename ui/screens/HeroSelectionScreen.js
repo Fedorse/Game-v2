@@ -13,26 +13,42 @@ export class HeroSelectionScreen extends Screen {
     INFO: {
       WIDTH: 600,
       HEIGHT: 400,
+<<<<<<< Updated upstream
       TOP_MARGIN: 10,
       PADDING: 20,
+=======
+      TOP_MARGIN: 90,
+>>>>>>> Stashed changes
       LINE_HEIGHT: 30,
     },
-    RUN_BUTTON: {
+    BUTTON: {
       WIDTH: 150,
       HEIGHT: 50,
+<<<<<<< Updated upstream
       RIGHT_MARGIN: 50,
       TOP_MARGIN: 50,
+=======
+      MARGIN: 100,
+      Y: (game) => game.canvas.height - 100,
+      X: (game) => game.canvas.width - 200,
+>>>>>>> Stashed changes
     },
   };
   constructor(game) {
     super(game);
+<<<<<<< Updated upstream
     this.bg = this.game.resourceManager.getImage('heroBg');
     this.infoBg = this.game.resourceManager.getImage('bgStats');
     this.heroes = CHARACTERS;
     this.selectedHero = this.heroes[0];
+=======
+    this.selectedHero = CHARACTERS[0];
+  }
+>>>>>>> Stashed changes
 
     this.heroIcons = [];
     this.createHeroIcons();
+<<<<<<< Updated upstream
     this.textBlocks = [];
 
     this.runButton = new UIButton(
@@ -76,18 +92,33 @@ export class HeroSelectionScreen extends Screen {
     const totalWidth =
       this.heroes.length * layout.ICON_SIZE +
       (this.heroes.length - 1) * layout.SPACING;
-    const startX = (this.game.canvas.width - totalWidth) / 2;
-    const y = this.game.canvas.height - layout.ICON_SIZE - layout.BOTTOM_MARGIN;
+=======
+    this.createRunButton();
+    this.createHeroInfo();
+    this.createBackButton();
+  }
 
+  createHeroIcons() {
+    const { HEROES } = HeroSelectionScreen.LAYOUT;
+    const totalWidth = 4 * HEROES.ICON_SIZE + 3 * HEROES.SPACING;
+>>>>>>> Stashed changes
+    const startX = (this.game.canvas.width - totalWidth) / 2;
+    const y = this.game.canvas.height - HEROES.ICON_SIZE - HEROES.BOTTOM_MARGIN;
+
+<<<<<<< Updated upstream
     this.heroes.forEach((hero, index) => {
       const x = startX + index * (layout.ICON_SIZE + layout.SPACING);
 
+=======
+    CHARACTERS.forEach((hero, index) => {
+      const x = startX + index * (HEROES.ICON_SIZE + HEROES.SPACING);
+>>>>>>> Stashed changes
       const icon = new UIIcon(
         this.game,
         x,
         y,
-        layout.ICON_SIZE,
-        layout.ICON_SIZE,
+        HEROES.ICON_SIZE,
+        HEROES.ICON_SIZE,
         hero,
         this
       );
@@ -95,6 +126,7 @@ export class HeroSelectionScreen extends Screen {
       this.heroIcons.push(icon);
     });
   }
+<<<<<<< Updated upstream
 
   renderHeroInfo(hero) {
     this.textBlocks = [
@@ -132,10 +164,73 @@ export class HeroSelectionScreen extends Screen {
         y: 280,
         font: '20px Arial',
         align: 'center',
+=======
+  createBackButton() {
+    const { BUTTON } = HeroSelectionScreen.LAYOUT;
+    const button = new UIButton(
+      this.game,
+      50,
+      BUTTON.Y(this.game),
+      BUTTON.WIDTH,
+      BUTTON.HEIGHT,
+      {
+        normal: this.game.resourceManager.getImage('btnNormal'),
+        hover: this.game.resourceManager.getImage('btnHover'),
+        pressed: this.game.resourceManager.getImage('btnPressed'),
+      },
+      'Back',
+      () => this.goBack()
+    );
+    this.addComponent(button);
+  }
+  goBack() {
+    super.hide();
+    this.game.screenManager.hideScreen('heroSelection');
+    this.game.screenManager.showScreen('mainMenu');
+  }
+
+  createRunButton() {
+    const { BUTTON } = HeroSelectionScreen.LAYOUT;
+    const button = new UIButton(
+      this.game,
+      BUTTON.X(this.game),
+      BUTTON.Y(this.game),
+      BUTTON.WIDTH,
+      BUTTON.HEIGHT,
+      {
+        normal: this.game.resourceManager.getImage('btnNormal'),
+        hover: this.game.resourceManager.getImage('btnHover'),
+        pressed: this.game.resourceManager.getImage('btnPressed'),
+      },
+      'Run',
+      () => this.confirmHeroSelection()
+    );
+    this.addComponent(button);
+  }
+
+  createHeroInfo() {
+    const infoTexts = [
+      {
+        text: this.selectedHero.name,
+        options: {
+          font: 'bold 32px Arial',
+          Y: 220,
+          X: this.game.canvas.width / 2,
+        },
+      },
+      {
+        text: this.selectedHero.description,
+        options: { font: '20px Arial', Y: 280, X: this.game.canvas.width / 2 },
+      },
+      {
+        text: `Health: ${this.selectedHero.characteristics.health}`,
+        options: { font: '20px Arial', Y: 340, X: this.game.canvas.width / 2 },
+>>>>>>> Stashed changes
       },
     ];
   }
 
+<<<<<<< Updated upstream
   renderText(context) {
     this.textBlocks.forEach((block) => {
       context.font = block.font;
@@ -162,6 +257,49 @@ export class HeroSelectionScreen extends Screen {
       const infoY = layout.TOP_MARGIN;
       context.drawImage(this.infoBg, infoX, infoY, layout.WIDTH, layout.HEIGHT);
     }
+=======
+    infoTexts.forEach(({ text, options }) => {
+      const textComponent = new UIText(this.game, options.X, options.Y, {
+        text,
+        font: options.font,
+        color: 'black',
+        align: 'center',
+      });
+      this.addComponent(textComponent);
+    });
+  }
+
+  updateHeroInfo(hero) {
+    this.selectedHero = hero;
+    this.components = this.components.filter((c) => !(c instanceof UIText));
+    this.createHeroInfo();
+  }
+
+  confirmHeroSelection() {
+    this.game.setPlayerHero(this.selectedHero.type);
+    this.game.screenManager.hideScreen('heroSelection');
+  }
+
+  render(context) {
+    const bg = this.game.resourceManager.getImage('heroBg');
+    const bgDescription = this.game.resourceManager.getImage('bgStats');
+    const { INFO } = HeroSelectionScreen.LAYOUT;
+
+    context.drawImage(
+      bg,
+      0,
+      0,
+      this.game.canvas.width,
+      this.game.canvas.height
+    );
+    context.drawImage(
+      bgDescription,
+      (this.game.canvas.width - INFO.WIDTH) / 2,
+      INFO.TOP_MARGIN,
+      INFO.WIDTH,
+      INFO.HEIGHT
+    );
+>>>>>>> Stashed changes
 
     // Рисуем текст
     this.renderText(context);

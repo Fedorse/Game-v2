@@ -35,7 +35,6 @@ export class StaticEntity {
   takeDamage(damage) {
     if (this.isDestructible && this.health > 0) {
       this.health -= damage;
-      console.log(`Object took damage: ${damage}, health: ${this.health}`); // Для отладки
       if (this.health <= 0) {
         this.destroy();
       }

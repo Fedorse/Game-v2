@@ -25,7 +25,11 @@ export class Warrior extends Entity {
       defence: 10,
       level: 1,
       experience: 0,
+<<<<<<< Updated upstream
       nextLevelExperience: 10,
+=======
+      nextLevelExperience: 30,
+>>>>>>> Stashed changes
     };
 
     // animations
@@ -108,7 +112,12 @@ export class Warrior extends Entity {
     this.stats.nextLevelExperience += 100;
     this.stats.defence += 10;
     this.weaponManager.gainExperience(100);
+<<<<<<< Updated upstream
     this.game.augmentScreen.show();
+=======
+    this.game.soundController.playSound('playerLevelUp');
+    this.game.screenManager.showScreen('augment');
+>>>>>>> Stashed changes
   }
 
   takeDamage(damage) {

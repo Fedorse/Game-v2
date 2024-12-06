@@ -43,6 +43,7 @@ export class UIIcon extends UIComponent {
         this.width,
         this.height
       );
+<<<<<<< Updated upstream
     } else {
       // Если изображения нет, заливаем цветом
       context.fillStyle = 'gray';
@@ -52,6 +53,8 @@ export class UIIcon extends UIComponent {
         this.width,
         this.height
       );
+=======
+>>>>>>> Stashed changes
     }
 
     if (this.isHovered || this.selectionScreen.selectedHero === this.heroData) {

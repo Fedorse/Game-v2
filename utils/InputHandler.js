@@ -26,8 +26,8 @@ export class InputHandler {
           case 'KeyS':
             this.down = true;
             break;
-          case 'Space':
-            this.game.pause();
+          case 'Escape':
+            this.game.togglePause();
             break;
         }
       }

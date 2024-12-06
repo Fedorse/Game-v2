@@ -80,5 +80,15 @@ export class UIButton extends UIComponent {
       const textY = this.position.y + this.height / 2;
       context.fillText(this.text, textX, textY);
     }
+<<<<<<< Updated upstream
+=======
+    if (this.isPressed) {
+      return this.images.pressed || this.images.normal || null;
+    }
+    if (this.isHovered) {
+      return this.images.hover || this.images.normal || null;
+    }
+    return this.images.normal || this.images.normal || null;
+>>>>>>> Stashed changes
   }
 }

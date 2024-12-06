@@ -1,5 +1,10 @@
 import { Game } from './core/Game.js';
+<<<<<<< Updated upstream
 import { ResourceManager } from './utils/ResourceManager.js';
+=======
+import { ResourceManager } from './managers/ResourceManager.js';
+import { AUDIO_CONFIG } from './configs/audioConfig.js';
+>>>>>>> Stashed changes
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
@@ -49,6 +54,10 @@ const imagesLoad = [
   { name: 'bgStats', src: '../public/assets/GUI/heroStats.png' },
   { name: 'healthBar', src: '../public/assets/GUI/helathBar.png' },
   { name: 'card', src: '../public/assets/GUI/cardLevel.png' },
+
+  { name: 'checked', src: '../public/assets/GUI/checked.png' },
+  { name: 'unchecked', src: '../public/assets/GUI/unChecked.png' },
+  { name: 'settingsBtn', src: '../public/assets/GUI/settingsMapBtn.png' },
 ];
 
 resourceManager
